@@ -1,0 +1,6 @@
+.rowContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 35.5px);
+}

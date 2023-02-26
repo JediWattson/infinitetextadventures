@@ -1,0 +1,45 @@
+.loadingContainer {
+  margin-top: 80px;
+}
+.chipContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 44px;
+}
+
+.chip {
+  margin: 4px;
+  height: 33px;
+  width: 33px;
+  background: #e6de00;
+  border-radius: 100%;
+  animation-iteration-count: infinite;
+  animation-name: pulsate;
+  animation-direction: alternate;
+  animation-duration: 0.4s;
+}
+
+.chip0 {
+  animation-delay: -0.4s;
+}
+
+.chip1 {
+  animation-delay: -0.2s;
+}
+
+@keyframes pulsate {
+  from {
+    height: 33px;
+    width: 33px;
+  }
+  to {
+    height: 44px;
+    width: 44px;
+  }
+}
+
+.text {
+  text-align: center;
+  color: #c3c8c8;
+}
