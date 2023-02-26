@@ -7,7 +7,7 @@ import Textarea from "../textarea";
 import styles from "./style.module.css";
 
 const postOracle = async (text?: string[]) => {
-  const res = await fetch("/api/chat", {
+  const res = await fetch("http://localhost:4200/chat", {
     method: "POST",
     body: JSON.stringify({ text }),
   });

@@ -1,22 +1,20 @@
-const jose = require("jose");
+var express = require('express');
+var router = express.Router();
+
 const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
 const openai = new OpenAIApi(configuration);
 
-const alg = "RS256";
 const backstory = `The Oracle is a narrator describing the adventure, while the detective askes questions and describes actions to carry along the story. This will be a text adventure murder mystery set in ancient Greece. The Oracle will give three days starting at the arrival to the murder scene for the detective to solve the murder or else something terrible will happen only the Oracle knows and explains after the said three days have finished. Every statement the detective makes be it action or question will cost time and the oracle will remind the detective how much time is left every response she gives. The Oracle starts by setting up the mystery.`;
 const narrator = "Oracle:";
 
-router.get('/', async function(req, res, next) {
+router.post('/', async function(req, res, next) {
   try {
-    if (!req.cookies.oracle) res.status(403).send();
-    const publicKey = await jose.importSPKI(process.env.RSAPUB, alg);
-    await jose.jwtVerify(req.cookies.oracle, publicKey);
-
-    const { text = [] } = JSON.parse(req.body);
+    const { text = [] } = req.body;
     text.unshift(backstory);
     text.push(narrator);
     const response = await openai.createCompletion(
@@ -48,7 +46,9 @@ router.get('/', async function(req, res, next) {
       });
     });
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
     res.status(500).send();
   }
 })
+
+module.exports = router
