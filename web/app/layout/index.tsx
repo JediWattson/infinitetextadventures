@@ -20,10 +20,12 @@ export const metaData = {
 const Layout = ({ children }: { children: React.ReactNode }) => {
   
   return (
-    <>
-      <Header />
-      <div className={styles.rowContainer}>{children}</div>
-    </>
+    <html>
+      <body>
+        <Header />
+        <div className={styles.rowContainer}>{children}</div>
+      </body>
+    </html>
   );
 };
 

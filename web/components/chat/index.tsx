@@ -12,7 +12,8 @@ const postOracle = async (text?: string[]) => {
     body: JSON.stringify({ text }),
   });
   const data = await res.json();
-
+  console.log("HELLO?");
+  
   if (data.text === "") {
     data.text = "Try again!";
   }
