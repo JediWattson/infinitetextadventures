@@ -12,5 +12,5 @@ export default function Session({ session }: { session: Session }) {
     setSession(session);
   }, [session, setSession]);
 
-  return <div />;
+  return null;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import type { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
 
 import {
   createContext,
@@ -23,7 +24,9 @@ export default function AuthContext({
   const [session, setSession] = useState<Session | null>(null);
   return (
     <SessionContext.Provider value={{ session, setSession }}>
-      {children}
+      <SessionProvider session={session}>
+        {children}
+      </SessionProvider>
     </SessionContext.Provider>
   );
 }

@@ -30,6 +30,7 @@ export default async function Layout({
 }) {
   const session = await getSession();
   if (!session) redirect("/");
+  
   return (
     <>
       <Session session={session} />

@@ -1,20 +1,23 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
+
 import Button from "../button";
 
-import { useAuthContext } from "@/app/context/auth";
-import { signIn, signOut } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import styles from "./styles.module.css";
-import { redirect, usePathname } from "next/navigation";
 
 function Header() {
-  const { session } = useAuthContext();
+  const router = useRouter()
   const pathname = usePathname();
-
-  if (pathname === "/" && session) redirect("/game");
-
+  const { data: session } = useSession();
+  
+  useEffect(() => {
+    if (pathname === "/" && session) router.replace("/game");
+  }, [pathname, session])
+  
   return (
     <Suspense fallback={<div />}>
       <div className={styles.header}>

@@ -24,18 +24,22 @@ async function streamToString(stream: Stream) {
   return new Promise((resolve, reject) => {
     let string = "";
     stream.on("data", (data: ReadableStream) => {
-      const lines = data
-        .toString()
-        .split("\n")
-        .filter((line) => line.trim() !== "");
-      lines.forEach((line) => {
-        const message = line.replace(/^data: /, "");
-        if (message === "[DONE]") {
-          resolve(string);
-        } else {
-          string += JSON.parse(message).choices[0].text;
-        }
-      });
+      try {
+        const lines = data
+          .toString()
+          .split("\n")
+          .filter((line) => line.trim() !== "");
+        lines.forEach((line) => {
+          const message = line.replace(/^data: /, "");
+          if (message === "[DONE]") {
+            resolve(string);
+          } else {
+            string += JSON.parse(message).choices[0].text;
+          }
+        });        
+      } catch (error) {
+        reject(error);
+      }
     });
   });
 }
