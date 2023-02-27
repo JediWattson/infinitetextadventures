@@ -45,6 +45,8 @@ async function streamToString(stream: Stream) {
 const res = NextResponse;
 export async function POST(req: NextApiRequest) {
     try {
+      return res.json({ text: narrator });
+
         const { text = [] } =  await streamToJSON(req.body);
         text.unshift(backstory);
         text.push(narrator);

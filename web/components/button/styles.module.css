@@ -8,11 +8,16 @@
   font-size: 22px;
 }
 
+.disabled {
+  background: #ff2e2e;
+  box-shadow: 2px 2px 8px #313c06;
+}
+
 .large {
   height: 420px;
 }
 
-.disabled {
-  background: #ff2e2e;
-  box-shadow: 2px 2px 8px #313c06;
+.inlineHeader {
+  padding: 8px;
+  margin: 4px 0;
 }
