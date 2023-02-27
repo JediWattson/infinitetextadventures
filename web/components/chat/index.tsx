@@ -7,32 +7,36 @@ import Textarea from "../textarea";
 import styles from "./style.module.css";
 
 const postOracle = async (text?: string[]) => {
-  const res = await fetch("http://localhost:4200/chat", {
+  const res = await fetch("/api/chat", {
     method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({ text }),
   });
-  const data = await res.json();
-  console.log("HELLO?");
   
-  if (data.text === "") {
-    data.text = "Try again!";
-  }
-
+  if (res.status >= 400) throw Error(`Server response status ${res.status}`);
+  
+  const data = await res.json();
+  console.log(data);
+  
   speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
   return data.text;
 };
 
 const Chat = () => {
   const [oracleSays, setOracle] = useState<string[]>([]);
-  const textValueRef = useRef(null);
-  const chatWindowRef = useRef(null);
+  const textValueRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleRef = (ref) => {
+  const handleRef = (ref: HTMLDivElement) => {
     if (!ref) return;
     ref.scrollTop = ref.scrollHeight;
   };
 
+  const initRef = useRef(false);
   useEffect(() => {
+    if (initRef.current) return;
+    initRef.current = true;
     const init = async () => {
       const text = await postOracle();
       setOracle([text]);
@@ -41,6 +45,7 @@ const Chat = () => {
   }, []);
 
   const handleClick = async () => {
+    if (!textValueRef.current) return;
     const { value } = textValueRef.current;
     textValueRef.current.value = "";
     const chatArr = [...oracleSays, `Detective: ${value}`];
