@@ -3,9 +3,9 @@ import styles from "./styles.module.css";
 type ButtonPropsType = {
   text: string;
   onClick: () => void;
-  inlineHeader?: boolean;
   disabled?: boolean;
   large?: boolean;
+  small?: boolean;
 };
 
 function Button({
@@ -13,13 +13,13 @@ function Button({
   text,
   onClick,
   disabled,
-  inlineHeader,
+  small,
 }: ButtonPropsType) {
   return (
     <button
       disabled={disabled}
       className={`${styles.buttonContainer} ${
-        inlineHeader ? styles.inlineHeader : ""
+        small ? styles.small : ""
       } ${disabled ? styles.disabled : ""} ${large ? styles.large : ""}`}
       onClick={onClick}
     >

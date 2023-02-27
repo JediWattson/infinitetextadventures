@@ -1,8 +1,8 @@
-import React from "react";
+import React, { Ref } from "react";
 
 import styles from "./style.module.css";
 
-const Textarea = ({ textValueRef, className = "" }) => {
+const Textarea = ({ textValueRef, className = "" }: { textValueRef: Ref<HTMLTextAreaElement>, className: string }) => {
   return (
     <textarea
       ref={textValueRef}

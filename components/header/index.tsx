@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 
 import Button from "../button";
 
@@ -14,21 +14,19 @@ function Header() {
   const pathname = usePathname();
   const { data: session } = useSession();
   
-  useEffect(() => {
-    if (pathname === "/" && session) router.replace("/game");
+  useEffect(() => {    
+    if (pathname === "/" && session) router.replace("/dashboard");
   }, [pathname, session])
   
   return (
-    <Suspense fallback={<div />}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>{"Infinite Text Adventures!"}</h2>
-        {session ? (
-          <Button inlineHeader text="Sign Out" onClick={() => signOut()} />
-        ) : (
-          <Button inlineHeader text="Sign In" onClick={() => signIn()} />
-        )}
-      </div>
-    </Suspense>
+    <div className={styles.header}>
+      <h2 className={styles.title}>{"Infinite Text Adventures!"}</h2>
+      {session ? (
+        <Button small text="Sign Out" onClick={() => signOut()} />
+      ) : (
+        <Button small text="Sign In" onClick={() => signIn()} />
+      )}
+    </div>
   );
 }
 
