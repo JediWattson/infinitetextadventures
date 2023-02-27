@@ -2,7 +2,6 @@ import type { NextApiRequest } from "next";
 import type { Stream } from "stream";
 import { NextResponse } from "next/server";
 
-
 const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
@@ -14,16 +13,16 @@ const backstory = `The Oracle is a narrator describing the adventure, while the 
 const narrator = "Oracle:";
 
 async function streamToJSON(stream: ReadableStream) {
-  const reader = stream.getReader()
-  let decoder = new TextDecoder('utf-8');
+  const reader = stream.getReader();
+  let decoder = new TextDecoder("utf-8");
 
-  const result = await reader.read()
+  const result = await reader.read();
   return JSON.parse(decoder.decode(result.value));
 }
 
 async function streamToString(stream: Stream) {
   return new Promise((resolve, reject) => {
-    let string = ''
+    let string = "";
     stream.on("data", (data: ReadableStream) => {
       const lines = data
         .toString()
@@ -38,36 +37,35 @@ async function streamToString(stream: Stream) {
         }
       });
     });
-
-  })
+  });
 }
 
 const res = NextResponse;
 export async function POST(req: NextApiRequest) {
-    try {
-      return res.json({ text: narrator });
+  try {
+    return res.json({ text: narrator });
 
-        const { text = [] } =  await streamToJSON(req.body);
-        text.unshift(backstory);
-        text.push(narrator);
-        
-        const completeion = await openai.createCompletion(
-          {
-            model: "text-davinci-003",
-            prompt: text.join("\n"),
-            stream: true,
-            max_tokens: 230,
-            stop: ["\n"],
-            temperature: 0.8,
-            frequency_penalty: 0.7,
-          },
-          { responseType: "stream" }
-        );
-    
-        const oracleRes = await streamToString(completeion.data);
-        return res.json({ text: narrator + oracleRes });
-      } catch (error) {
-        console.error(error);        
-        res.json({ status: 500});
-      }
+    const { text = [] } = await streamToJSON(req.body);
+    text.unshift(backstory);
+    text.push(narrator);
+
+    const completeion = await openai.createCompletion(
+      {
+        model: "text-davinci-003",
+        prompt: text.join("\n"),
+        stream: true,
+        max_tokens: 230,
+        stop: ["\n"],
+        temperature: 0.8,
+        frequency_penalty: 0.7,
+      },
+      { responseType: "stream" }
+    );
+
+    const oracleRes = await streamToString(completeion.data);
+    return res.json({ text: narrator + oracleRes });
+  } catch (error) {
+    console.error(error);
+    res.json({ status: 500 });
+  }
 }

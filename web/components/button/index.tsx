@@ -8,13 +8,19 @@ type ButtonPropsType = {
   large?: boolean;
 };
 
-function Button({ large, text, onClick, disabled, inlineHeader }: ButtonPropsType) {
+function Button({
+  large,
+  text,
+  onClick,
+  disabled,
+  inlineHeader,
+}: ButtonPropsType) {
   return (
     <button
       disabled={disabled}
-      className={`${styles.buttonContainer} ${inlineHeader ? styles.inlineHeader : ""} ${
-        disabled ? styles.disabled : ""
-      } ${large ? styles.large : ""}`}
+      className={`${styles.buttonContainer} ${
+        inlineHeader ? styles.inlineHeader : ""
+      } ${disabled ? styles.disabled : ""} ${large ? styles.large : ""}`}
       onClick={onClick}
     >
       {text}

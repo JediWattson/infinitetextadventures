@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../button";
@@ -10,14 +10,14 @@ const postOracle = async (text?: string[]) => {
   const res = await fetch("/api/chat", {
     method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ text }),
   });
-  
+
   if (res.status >= 400) throw Error(`Server response status ${res.status}`);
-  
-  const data = await res.json();  
+
+  const data = await res.json();
   speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
   return data.text;
 };
