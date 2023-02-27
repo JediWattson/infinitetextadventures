@@ -1,10 +1,23 @@
-import { Session } from 'next-auth'
-import { headers } from 'next/headers'
-import Header from "@/components/header";
-import AuthContext from './AuthContext';
+import dynamic from "next/dynamic";
+import AuthContext from "../context/auth";
+import './globals.css'
 
-import styles from "./styles.module.css";
-import '../globals.css'
+const Header = dynamic(() => import("@/components/header"), { ssr: false });
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {  
+  return (
+    <html>
+      <body>
+        <AuthContext>
+          <Header />
+          <main>
+            {children}
+          </main>
+        </AuthContext>
+      </body>
+    </html>
+  );
+};
 
 export const metaData = {
   title: 'Infinite Text Advs.',
@@ -15,35 +28,4 @@ export const metaData = {
     sitename: 'infinitetextadventures.app',
     images: [{}]
   }
-
 }
-
-async function getSession(): Promise<Session | undefined> {
-  const cookie = headers().get('cookie');  
-
-  if (!cookie) return;
-  const response = await fetch(`${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/chat`, {
-    headers: {
-      cookie,
-    },
-  });
-
-  if (response.status !== 200) return;
-  const session = await response.json();
-  return Object.keys(session).length > 0 ? session : undefined;
-}
-
-export default async function RootLayout({ children }: { children: React.ReactNode }) {  
-  const session = await getSession();
-  
-  return (
-    <html>
-      <body>
-        <AuthContext session={session}>
-          <Header />
-          <div className={styles.rowContainer}>{children}</div>
-        </AuthContext>
-      </body>
-    </html>
-  );
-};

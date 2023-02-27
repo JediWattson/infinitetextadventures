@@ -1,0 +1,12 @@
+body {
+  background: #082136;
+  margin: 0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #cec6c6;
+  min-height: calc(100vh - 56px);
+}
