@@ -2,7 +2,7 @@ import styles from "./styles.module.css";
 
 type ButtonPropsType = {
   text: string;
-  onClick: (any) => void;
+  onClick: () => void;
   disabled?: boolean;
   large?: boolean;
 };

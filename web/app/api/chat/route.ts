@@ -1,5 +1,7 @@
 import type { NextApiRequest } from "next";
+import type { Stream } from "stream";
 import { NextResponse } from "next/server";
+
 
 const { Configuration, OpenAIApi } = require("openai");
 
@@ -19,7 +21,7 @@ async function streamToJSON(stream: ReadableStream) {
   return JSON.parse(decoder.decode(result.value));
 }
 
-async function streamToString(stream) {
+async function streamToString(stream: Stream) {
   return new Promise((resolve, reject) => {
     let string = ''
     stream.on("data", (data: ReadableStream) => {
@@ -47,7 +49,7 @@ export async function POST(req: NextApiRequest) {
         text.unshift(backstory);
         text.push(narrator);
         
-        const response = await openai.createCompletion(
+        const completeion = await openai.createCompletion(
           {
             model: "text-davinci-003",
             prompt: text.join("\n"),
@@ -60,7 +62,7 @@ export async function POST(req: NextApiRequest) {
           { responseType: "stream" }
         );
     
-        const oracleRes = await streamToString(response.data);
+        const oracleRes = await streamToString(completeion.data);
         return res.json({ text: narrator + oracleRes });
       } catch (error) {
         console.error(error);        
