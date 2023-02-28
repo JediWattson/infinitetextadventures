@@ -5,10 +5,9 @@ export default function Home() {
   return (
     <>
       <div className={style.container}>
-        <h2>Welcome to my game!</h2>
+        <h2>Welcome to my Infinite Text Adventures!</h2>
         <p>
-          If you want to try it out click the sign in button above and use your
-          Gitlab account
+          Feel free to sign in and create a game to try out my approach to making text adventures :D
         </p>
       </div>
     </>

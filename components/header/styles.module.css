@@ -16,14 +16,10 @@
   animation-duration: 3s;
 }
 
-.link > a {
-  font-size: 20px;
-  text-decoration: none;
-}
-
-.bar {
-  margin: 0 4px;
-  color: blue;
+.actions {
+  display: flex;
+  gap: 12px;
+  margin: 4px 0;
 }
 
 @keyframes pulsate {

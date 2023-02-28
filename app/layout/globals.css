@@ -14,3 +14,7 @@ main {
 textarea:focus, input:focus{
   outline: none;
 }
+
+li {
+  list-style: none;  
+}
