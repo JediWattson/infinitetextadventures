@@ -11,8 +11,8 @@
 
 .textBox {
   overflow: scroll;
-  height: calc(100vh - 122px);
-  margin: auto 24px;
+  height: calc(100vh - 145px);
+  padding: 0 24px;
   font-size: 22px;
 }
 

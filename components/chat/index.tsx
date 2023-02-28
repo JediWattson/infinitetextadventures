@@ -6,9 +6,9 @@ import Textarea from "../textarea";
 
 import styles from "./style.module.css";
 
-const postOracle = async (text?: string[]) => {
-  const res = await fetch("/api/chat", {
-    method: "POST",
+const postOracle = async (gameId: string, text: string) => {
+  const res = await fetch(`/game/${gameId}/api`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
@@ -22,35 +22,32 @@ const postOracle = async (text?: string[]) => {
   return data.text;
 };
 
-const Chat = () => {
+const Chat = ({ gameId, logs }: { gameId: string, logs: { text: string }[] }) => {
   const [oracleSays, setOracle] = useState<string[]>([]);
   const textValueRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (!logs) return;
+    setOracle(logs.map(l => l.text))
+  }, [logs])
 
   const handleRef = (ref: HTMLDivElement) => {
     if (!ref) return;
     ref.scrollTop = ref.scrollHeight;
   };
 
-  const initRef = useRef(false);
-  useEffect(() => {
-    if (initRef.current) return;
-    initRef.current = true;
-    const init = async () => {
-      const text = await postOracle();
-      setOracle([text]);
-    };
-    init();
-  }, []);
-
   const handleClick = async () => {
     if (!textValueRef.current) return;
-    const { value } = textValueRef.current;
-    textValueRef.current.value = "";
-    const chatArr = [...oracleSays, `Detective: ${value}`];
+    
+    const playerText = `Detective: ${textValueRef.current.value}`
+    const chatArr = [...oracleSays, playerText];
     setOracle(chatArr);
-    const text = await postOracle(chatArr);
+    textValueRef.current.value = "";
+    
+    const text = await postOracle(gameId, playerText);
     setOracle([...chatArr, text]);
   };
+
   return (
     <>
       <div ref={handleRef} className={styles.textBox}>

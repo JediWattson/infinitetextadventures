@@ -9,7 +9,6 @@ function Loading() {
         <div className={`${chip} ${chip1}`} />
         <div className={chip} />
       </div>
-      <p className={styles.text}>Determining your time of sunrise!</p>
     </div>
   );
 }
