@@ -16,7 +16,10 @@ const Chat = ({
 }) => {
   const [oracleSays, setOracle] = useState<string[]>([]);
 
+  const gameIdRef = useRef<string | null>(null);
   useEffect(() => {
+    if (gameId === gameIdRef.current) return;
+    gameIdRef.current = gameId;   
     (async () => {
       const textArr = await getOracle(gameId);
       setOracle(textArr);

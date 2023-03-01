@@ -20,7 +20,7 @@ export async function GET(
     const actionsMsg = await messagesActions();
     const messages = await actionsMsg.getMessages(params.id);
     if (messages.rowCount === 0) {  
-      const text = "WORKS" // await streamCompletetion([backstory, narrator].join("\n"));
+      const text = await streamCompletetion([backstory, narrator].join("\n"));
       const session = await getServerSession(authOptions);
       if (!session?.user?.id) throw Error('No userId found!')
       await actionsMsg.addMessage(session?.user?.id, params.id, text);
@@ -51,7 +51,7 @@ export async function PUT(
     textArr.push(narrator);
 
     await actionsMsg.addMessage(userId, params.id, text);
-    const narratorRes = "works" // await streamCompletetion(textArr.join("\n"));
+    const narratorRes = await streamCompletetion(textArr.join("\n"));
     await actionsMsg.addMessage(userId, params.id, narratorRes);
     return NextResponse.json({ text: narratorRes });
   } catch (error) {
