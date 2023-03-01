@@ -36,7 +36,7 @@ function Header() {
 
   return (
     <nav className={styles.header}>
-      <h2 className={styles.title}>{"Infinite Text Adventures!"}</h2>
+      <h2 className={styles.title}>{"ITA!"}</h2>
       <ul className={styles.actions}>
         {pathname?.includes("/game") && (
           <li>

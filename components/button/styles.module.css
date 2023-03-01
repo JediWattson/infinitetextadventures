@@ -9,6 +9,12 @@
   font-size: 22px;
 }
 
+@media (max-width: 450px) {
+  .buttonContainer {
+    font-size: 18px;
+  }
+}
+
 .disabled {
   background: #ff2e2e;
   box-shadow: 2px 2px 8px #313c06;
