@@ -33,11 +33,18 @@ export const metadata = {
   icons: {
     icon: "/favicon/favicon.ico",
   },
-  opengraph: {
+  openGraph: {
     title: "Infinite Text Adventures!",
     description:
       "Using generative AI I've been able to create a text adventure game!",
     sitename: "https://infinitetextadventures.app",
-    image: "/og-image/infinity.png"
+    images: [
+      {
+        height: 1024,
+        width: 1024,
+        url: "/og-image/infinity.png",
+        alt: "painted image of infinity symbol in the middle of the woods",
+      },
+    ],
   },
 };
