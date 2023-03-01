@@ -4,14 +4,14 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function PUT() {
-    try {
-        const session = await getServerSession(authOptions);    
-        const games = await gamesActions()
-        if (!session?.user?.id) throw Error('No id for user found');
-        const gameId = await games.createGame(session?.user?.id );
-        return NextResponse.json({ gameId })
-    } catch (error) {
-        console.error(error);
-        NextResponse.json({ status: 500 });
-    }
+  try {
+    const session = await getServerSession(authOptions);
+    const games = await gamesActions();
+    if (!session?.user?.id) throw Error("No id for user found");
+    const gameId = await games.createGame(session?.user?.id);
+    return NextResponse.json({ gameId });
+  } catch (error) {
+    console.error(error);
+    NextResponse.json({ status: 500 });
+  }
 }

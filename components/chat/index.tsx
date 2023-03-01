@@ -22,14 +22,20 @@ const postOracle = async (gameId: string, text: string) => {
   return data.text;
 };
 
-const Chat = ({ gameId, logs }: { gameId: string, logs: { text: string }[] }) => {
+const Chat = ({
+  gameId,
+  logs,
+}: {
+  gameId: string;
+  logs: { text: string }[];
+}) => {
   const [oracleSays, setOracle] = useState<string[]>([]);
   const textValueRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (!logs) return;
-    setOracle(logs.map(l => l.text))
-  }, [logs])
+    setOracle(logs.map((l) => l.text));
+  }, [logs]);
 
   const handleRef = (ref: HTMLDivElement) => {
     if (!ref) return;
@@ -38,12 +44,12 @@ const Chat = ({ gameId, logs }: { gameId: string, logs: { text: string }[] }) =>
 
   const handleClick = async () => {
     if (!textValueRef.current) return;
-    
-    const playerText = `Detective: ${textValueRef.current.value}`
+
+    const playerText = `Detective: ${textValueRef.current.value}`;
     const chatArr = [...oracleSays, playerText];
     setOracle(chatArr);
     textValueRef.current.value = "";
-    
+
     const text = await postOracle(gameId, playerText);
     setOracle([...chatArr, text]);
   };

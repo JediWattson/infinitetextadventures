@@ -2,7 +2,7 @@ import { Stream } from "stream";
 import { OpenAIApi, Configuration } from "openai";
 
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 const openai = new OpenAIApi(configuration);
@@ -11,19 +11,19 @@ function handleStream(stream: Stream) {
   return new Promise<string>((resolve, reject) => {
     let string = "";
     stream.on("data", (data: ReadableStream) => {
-      try {        
+      try {
         data
           .toString()
           .split("\n")
           .filter((line) => line.trim() !== "")
           .forEach((line) => {
-          const message = line.replace(/^data: /, "");
-          if (message === "[DONE]") {            
-            resolve(string);
-          } else {
-            string += JSON.parse(message).choices[0].text;
-          }
-        });        
+            const message = line.replace(/^data: /, "");
+            if (message === "[DONE]") {
+              resolve(string);
+            } else {
+              string += JSON.parse(message).choices[0].text;
+            }
+          });
       } catch (error) {
         reject(error);
       }
@@ -44,15 +44,14 @@ export async function streamCompletetion(prompt: string) {
     },
     { responseType: "stream" }
   );
-  
+
   return handleStream(completion.data as any);
 }
 
 export async function streamToJSON(stream: ReadableStream) {
-    const reader = stream.getReader();
-    let decoder = new TextDecoder("utf-8");
-  
-    const result = await reader.read();
-    return JSON.parse(decoder.decode(result.value));
+  const reader = stream.getReader();
+  let decoder = new TextDecoder("utf-8");
+
+  const result = await reader.read();
+  return JSON.parse(decoder.decode(result.value));
 }
-  

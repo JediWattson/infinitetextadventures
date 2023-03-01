@@ -8,19 +8,13 @@ type ButtonPropsType = {
   small?: boolean;
 };
 
-function Button({
-  large,
-  text,
-  onClick,
-  disabled,
-  small,
-}: ButtonPropsType) {
+function Button({ large, text, onClick, disabled, small }: ButtonPropsType) {
   return (
     <button
       disabled={disabled}
-      className={`${styles.buttonContainer} ${
-        small ? styles.small : ""
-      } ${disabled ? styles.disabled : ""} ${large ? styles.large : ""}`}
+      className={`${styles.buttonContainer} ${small ? styles.small : ""} ${
+        disabled ? styles.disabled : ""
+      } ${large ? styles.large : ""}`}
       onClick={onClick}
     >
       {text}

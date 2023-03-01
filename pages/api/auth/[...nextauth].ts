@@ -4,23 +4,30 @@ import NextAuth, { Session, User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
 if (!process.env.GITHUB_ID || !process.env.GITHUB_SECRET) {
-  throw Error('Invalid/Missing environment variable: "GITHUB_SECRET | GITHUB_ID"')
+  throw Error(
+    'Invalid/Missing environment variable: "GITHUB_SECRET | GITHUB_ID"'
+  );
 }
 
 declare interface DefaultSession {
-  user?: { id?: string }
+  user?: { id?: string };
 }
 
 export const authOptions = {
   adapter: MongoDBAdapter(mongoClient),
   // pages: { newUser: '/auth/new-user' },
   callbacks: {
-    async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {      
-      if (new URL(url).pathname === '/') 
-        return url + "dashboard";
+    async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
+      if (new URL(url).pathname === "/") return url + "dashboard";
       return url;
     },
-    async session({ session, user }: { session: Session & DefaultSession, user: User }) {
+    async session({
+      session,
+      user,
+    }: {
+      session: Session & DefaultSession;
+      user: User;
+    }) {
       if (session?.user && user.id) {
         session.user.id = user.id;
       }

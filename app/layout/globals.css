@@ -11,10 +11,11 @@ main {
   min-height: calc(100vh - 56px);
 }
 
-textarea:focus, input:focus{
+textarea:focus,
+input:focus {
   outline: none;
 }
 
 li {
-  list-style: none;  
+  list-style: none;
 }

@@ -1,48 +1,48 @@
 .container {
-    position: relative;
+  position: relative;
 }
 
 .label {
-    height: 22px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 8px;
+  height: 22px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 8px;
 
-    border: 3px solid transparent;
-    background-color: transparent;
-    font-size: 16px;
+  border: 3px solid transparent;
+  background-color: transparent;
+  font-size: 16px;
 
-    pointer-events: none;
-    display: flex;
-    align-items: center;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
 
-    transform: translate(0);
-    transition: transform 0.15s ease-out, font-size 0.15s ease-out;
+  transform: translate(0);
+  transition: transform 0.15s ease-out, font-size 0.15s ease-out;
 }
 
 .input {
-    border-bottom: #d7d7fd solid;
-    border-top: transparent solid;
-    border-left: transparent solid;
-    border-right: transparent solid;
-    transition: border-bottom 0.15s ease-out;
+  border-bottom: #d7d7fd solid;
+  border-top: transparent solid;
+  border-left: transparent solid;
+  border-right: transparent solid;
+  transition: border-bottom 0.15s ease-out;
 
-    padding: 4px;
-    color: #cec6c6;
-    font-size: 22px;
+  padding: 4px;
+  color: #cec6c6;
+  font-size: 22px;
 
-    background: transparent;
-    opacity: 0.7;
+  background: transparent;
+  opacity: 0.7;
 
-    position: relative;
+  position: relative;
 }
 
-.input:focus{
-    border-bottom: #6262f2 solid;
+.input:focus {
+  border-bottom: #6262f2 solid;
 }
 
 .input:focus + .label {
-    font-size: 12px;
-    transform: translate(0, -24px);
+  font-size: 12px;
+  transform: translate(0, -24px);
 }
