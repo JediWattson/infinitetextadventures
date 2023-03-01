@@ -42,7 +42,7 @@ export const metadata = {
       {
         height: 1024,
         width: 1024,
-        url: "og-image/infinity.png",
+        url: "/og-image/infinity.png",
         alt: "painted image of infinity symbol in the middle of the woods",
       },
     ],
