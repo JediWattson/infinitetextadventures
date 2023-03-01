@@ -38,6 +38,8 @@ export const metadata = {
     description:
       "Using generative AI I've been able to create a text adventure game!",
     sitename: "https://infinitetextadventures.app",
+    url: "https://infinitetextadventures.app",
+    type: "Gaming",
     images: [
       {
         height: 1024,
