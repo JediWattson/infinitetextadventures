@@ -9,21 +9,17 @@ import Textarea from "../textarea";
 
 import styles from "./style.module.css";
 
-const Chat = ({
-  gameId
-}: {
-  gameId: string
-}) => {
+const Chat = ({ gameId }: { gameId: string }) => {
   const [oracleSays, setOracle] = useState<string[]>([]);
 
   const gameIdRef = useRef<string | null>(null);
   useEffect(() => {
     if (gameId === gameIdRef.current) return;
-    gameIdRef.current = gameId;   
+    gameIdRef.current = gameId;
     (async () => {
       const textArr = await getOracle(gameId);
       setOracle(textArr);
-    })()
+    })();
   }, [gameId]);
 
   const handleRef = (ref: HTMLDivElement) => {
@@ -32,7 +28,7 @@ const Chat = ({
   };
 
   const textValueRef = useRef<HTMLTextAreaElement>(null);
-    const handleClick = async () => {
+  const handleClick = async () => {
     if (!textValueRef.current) return;
 
     const playerText = `Detective: ${textValueRef.current.value}`;

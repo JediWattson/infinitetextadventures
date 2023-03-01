@@ -17,6 +17,6 @@ export default async () => {
 
   const pool = new Pool(config);
   return {
-    query: (text: string, params: any) => pool.query(text, params) 
-  }
+    query: (text: string, params: any) => pool.query(text, params),
+  };
 };
