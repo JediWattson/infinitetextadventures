@@ -1,7 +1,14 @@
+import { Source_Sans_Pro } from 'next/font/google'
 import AuthContext from "../context/auth";
 import Header from "@/components/header";
 
 import "./globals.css";
+
+const sourceSansPro = Source_Sans_Pro({
+  weight: "400",
+  subsets: ['latin'],
+  display: "swap"
+})
 
 export default async function RootLayout({
   children,
@@ -9,7 +16,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
+    <html lang='en' className={sourceSansPro.className}>
       <body>
         <AuthContext>
           <Header />
