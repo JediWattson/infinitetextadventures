@@ -1,4 +1,4 @@
-import { Source_Sans_Pro } from 'next/font/google'
+import { Source_Sans_Pro } from "next/font/google";
 import AuthContext from "../context/auth";
 import Header from "@/components/header";
 
@@ -6,9 +6,9 @@ import "./globals.css";
 
 const sourceSansPro = Source_Sans_Pro({
   weight: "400",
-  subsets: ['latin'],
-  display: "swap"
-})
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default async function RootLayout({
   children,
@@ -16,7 +16,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en' className={sourceSansPro.className}>
+    <html lang="en" className={sourceSansPro.className}>
       <body>
         <AuthContext>
           <Header />
@@ -31,17 +31,20 @@ export const metadata = {
   title: "Infinite Text Adventures",
   description: "Play an infinite amount of various text adventures",
   icons: {
-    icon: '/favicon/favicon.ico'
+    icon: "/favicon/favicon.ico",
   },
   opengraph: {
     title: "Infinite Text Adventures!",
-    description: "Using generative AI I've been able to create a text adventure game!",
+    description:
+      "Using generative AI I've been able to create a text adventure game!",
     sitename: "https://infinitetextadventures.app",
-    images: [{
-      height: 1024,
-      width: 1024,
-      url: 'og-image/infinity.png',
-      alt: "painted image of infinity symbol in the middle of the woods"
-    }],
+    images: [
+      {
+        height: 1024,
+        width: 1024,
+        url: "og-image/infinity.png",
+        alt: "painted image of infinity symbol in the middle of the woods",
+      },
+    ],
   },
 };
