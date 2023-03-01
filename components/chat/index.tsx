@@ -1,48 +1,35 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+
+import { getOracle, postOracle } from "./lib";
+
 import Button from "../button";
 import Textarea from "../textarea";
 
 import styles from "./style.module.css";
 
-const postOracle = async (gameId: string, text: string) => {
-  const res = await fetch(`/game/${gameId}/api`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ text }),
-  });
-
-  if (res.status >= 400) throw Error(`Server response status ${res.status}`);
-
-  const data = await res.json();
-  // speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
-  return data.text;
-};
-
 const Chat = ({
-  gameId,
-  logs,
+  gameId
 }: {
-  gameId: string;
-  logs: { text: string }[];
+  gameId: string
 }) => {
   const [oracleSays, setOracle] = useState<string[]>([]);
-  const textValueRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (!logs) return;
-    setOracle(logs.map((l) => l.text));
-  }, [logs]);
+    (async () => {
+      const textArr = await getOracle(gameId);
+      setOracle(textArr);
+    })()
+  }, [gameId]);
 
   const handleRef = (ref: HTMLDivElement) => {
     if (!ref) return;
     ref.scrollTop = ref.scrollHeight;
   };
 
-  const handleClick = async () => {
+  const textValueRef = useRef<HTMLTextAreaElement>(null);
+    const handleClick = async () => {
     if (!textValueRef.current) return;
 
     const playerText = `Detective: ${textValueRef.current.value}`;
