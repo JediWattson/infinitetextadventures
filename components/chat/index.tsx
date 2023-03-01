@@ -18,7 +18,7 @@ const postOracle = async (gameId: string, text: string) => {
   if (res.status >= 400) throw Error(`Server response status ${res.status}`);
 
   const data = await res.json();
-  speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
+  // speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
   return data.text;
 };
 

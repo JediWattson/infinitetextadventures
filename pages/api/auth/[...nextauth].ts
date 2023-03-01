@@ -15,6 +15,11 @@ export const authOptions = {
   adapter: MongoDBAdapter(mongoClient),
   // pages: { newUser: '/auth/new-user' },
   callbacks: {
+    async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {      
+      if (new URL(url).pathname === '/') 
+        return url + "dashboard";
+      return url;
+    },
     async session({ session, user }: { session: Session & DefaultSession, user: User }) {
       if (session?.user && user.id) {
         session.user.id = user.id;

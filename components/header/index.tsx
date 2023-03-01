@@ -5,30 +5,34 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { signIn, signOut, useSession } from "next-auth/react";
 
+import { useAuthContext } from "@/app/context/auth";
 import Button from '@/components/button';
 
 import styles from "./styles.module.css";
 
+
 function Header() {
   const router = useRouter()
   const pathname = usePathname();
-  const { data: session } = useSession();
   
+  const auth = useAuthContext()
+  const isSession = !!auth.session;
   useEffect(() => {    
-    if (pathname === "/" && session) router.replace("/dashboard");
-  }, [pathname, session])
+    if (pathname === "/" && isSession) router.replace("/dashboard");
+  }, [pathname, isSession])
   
   const [endLoading, setEndLoading] = useState(false);
+  useEffect(() => {
+    setEndLoading(false);
+  }, [pathname])
   const handleEndGame = async () => {
     try {
       setEndLoading(true);
       await fetch(`${pathname}/api`, { method: "DELETE" });
-      await router.replace("/dashboard");
-      setEndLoading(false);
+      router.replace("/dashboard");
     } catch (error) {
       console.error(error);
-      setEndLoading(false);
-    }
+    } 
   }
 
   return (
@@ -38,7 +42,7 @@ function Header() {
         {pathname?.includes("/game") && (
           <li><Button small text={endLoading ? "Ending Game" : "End Game"} onClick={handleEndGame} disabled={endLoading} /></li>        
         )}
-        <li><Button small text={`Sign ${session ? "Out" : "In"}`} onClick={session ? signOut : signIn} /></li>
+        <li><Button small text={`Sign ${isSession ? "Out" : "In"}`} onClick={isSession ? signOut : signIn} /></li>
       </ul>      
     </nav>
   );

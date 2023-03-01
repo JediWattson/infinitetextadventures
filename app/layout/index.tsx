@@ -1,8 +1,7 @@
-import dynamic from "next/dynamic";
 import AuthContext from "../context/auth";
-import "./globals.css";
+import Header from "@/components/header";
 
-const Header = dynamic(() => import("@/components/header"), { ssr: false });
+import "./globals.css";
 
 export default async function RootLayout({
   children,
