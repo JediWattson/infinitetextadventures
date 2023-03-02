@@ -9,7 +9,7 @@ export type GameMetaType = {
 export const gameMeta: { [key: string]: GameMetaType } = {
     OraclesPrivateEye: {
         // USER FACING
-        title: "The Oracle's Private Eye!",
+        title: "The Oracle's Private Eye",
         description: "You are a detective tasked with a mystery surrounding someone's death with three days to solve the murder. The Oracle will narrate an adventure explaining any questions or events that might occour for you actions.",
         speaker: "Detective:",
 
