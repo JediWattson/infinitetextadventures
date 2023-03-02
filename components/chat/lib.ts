@@ -1,4 +1,4 @@
-
+// TODO: move somewhere cleaner
 const concatSpeakerText = ({ speaker, text }: { speaker: string, text: string }) => `${speaker} ${text}`
 
 export const postOracle = async (gameId: string, message: { speaker: string, text: string }) => {

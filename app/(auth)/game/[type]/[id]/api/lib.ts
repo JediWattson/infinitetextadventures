@@ -19,6 +19,7 @@ function handleStream(stream: Stream) {
           .forEach((line) => {
             const message = line.replace(/^data: /, "");
             if (message === "[DONE]") {
+              if (string === '') reject('Empty string sent')
               resolve(string);
             } else {
               string += JSON.parse(message).choices[0].text;

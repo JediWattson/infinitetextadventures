@@ -11,7 +11,7 @@ export default async function Dashboard() {
   const games = await gamesActions();
   const currentGame = await games.findCurrentGame(session?.user?.id);
   if (currentGame?._id) {
-    redirect(`/game/${currentGame?._id}`);
+    redirect(`/game/${currentGame?.type}/${currentGame?._id}`);
   }
 
   return <DashboardComponent />;

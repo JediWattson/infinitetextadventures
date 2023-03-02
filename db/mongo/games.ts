@@ -9,10 +9,10 @@ export default async function gamesActions() {
     async findCurrentGame(userId: string) {
       return games.findOne({ userId, status: "started" });
     },
-    async createGame(userId: string) {
+    async createGame(userId: string, gameType: string) {
       const currentGame = await this.findCurrentGame(userId);
       if (currentGame) return currentGame._id;
-      const game = await games.insertOne({ userId, status: "started" });
+      const game = await games.insertOne({ userId, gameType, status: "started" });
       return game.insertedId;
     },
     async finishGame(gameId: string) {

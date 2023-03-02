@@ -15,13 +15,13 @@ export default function DashboardComponent() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const handleClick = async () => {
+  const handleClick = async (gameType: string) => {
     try {
       setLoading(true);
-      const res = await fetch("/dashboard/api", { method: "PUT" });
+      const res = await fetch(`/dashboard/api?type=${gameType}`, { method: "PUT" });
       const game = await res.json();
       if (!game.gameId) throw Error("Game was not created here...");
-      router.push(`/game/${game.gameId}`);
+      router.push(`/game/${gameType}/${game.gameId}`);
     } catch (error) {
       console.error(error);
       setLoading(false);
@@ -32,7 +32,7 @@ export default function DashboardComponent() {
     <div className={styles.container}>
       <h2>{title}</h2>
       <p>{description}</p>
-      <Button onClick={handleClick} text={text} disabled={loading} />
+      <Button onClick={() => handleClick("OraclePrivateEye")} text={text} disabled={loading} />
     </div>
   );
 }

@@ -11,18 +11,18 @@ import styles from "./style.module.css";
 
 // speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
 
-const Chat = ({ gameId }: { gameId: string }) => {
+const Chat = ({ gamePath }: { gamePath: string }) => {
   const [oracleSays, setOracle] = useState<string[]>([]);
 
-  const gameIdRef = useRef<string | null>(null);
+  const gamePathRef = useRef<string | null>(null);
   useEffect(() => {
-    if (gameId === gameIdRef.current) return;
-    gameIdRef.current = gameId;
+    if (gamePath === gamePathRef.current) return;
+    gamePathRef.current = gamePath;
     (async () => {
-      const textArr = await getGame(gameId);
+      const textArr = await getGame(gamePath);
       setOracle(textArr);
     })();
-  }, [gameId]);
+  }, [gamePath]);
 
   const handleRef = (ref: HTMLDivElement) => {
     if (!ref) return;
@@ -40,7 +40,7 @@ const Chat = ({ gameId }: { gameId: string }) => {
     const newChat = [...oracleSays, `${speaker} ${playerText}`]
     setOracle(newChat);
 
-    const text = await postOracle(gameId, { speaker, text: playerText });
+    const text = await postOracle(gamePath, { speaker, text: playerText });
     setOracle([...newChat, text]);
   };
 
