@@ -29,7 +29,16 @@ export const gameMeta: { [key: string]: GameMetaType } = {
         `,
         speaker: "Zakaria:",
         
-        backstory: "Jebidiah is a narrator describing the adventure, while Zakaria askes questions and describes actions to carry along the story. Zakaria is a nomadic sharpshooter, and in this adventure he finds himself in trouble with the locals. He has only six bullets he must place correctly throughout the town to kill the bad guys before they kill him. Zakaria can either shoot somewhere or ask for details that will help him figure out where to shoot. Jebidiah will provide him with the details and remind him of how many bullets he has left. Jebidiah also sets up the story.",
+        backstory: `
+            Jebidiah is a narrator describing the adventure, while Zakaria askes questions and describes his actions. 
+            Zakaria is a nomadic sharpshooter, and in this adventure he finds himself in trouble with bandits. 
+            Zakaria must stratigically place each bullet in a way that kills all of bandits.
+            The bandits can shoot back and injure or kill Zakaria.
+            Zakaria has only six bullets to kill the bad guys before they kill him. 
+            Zakaria can only shoot one time per turn and must write that he fired a bullet in some way. 
+            Jebidiah will provide him with the details and remind him of how many bullets he has left. 
+            Jebidiah starts with a description of the surroundings.
+        `,
         narrator: "Jebidiah:",
 
     }
