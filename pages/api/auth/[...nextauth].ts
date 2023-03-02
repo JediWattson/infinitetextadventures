@@ -2,7 +2,6 @@ import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import mongoClient from "@/db/mongo/connection";
 import NextAuth, { Session, User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-import FacebookProvider from "next-auth/providers/facebook";
 import DiscordProvider from "next-auth/providers/discord";
 
 if (!process.env.GITHUB_ID) {
@@ -11,14 +10,6 @@ if (!process.env.GITHUB_ID) {
 
 if (!process.env.GITHUB_SECRET) {
   throw Error('Invalid/Missing environment variable: "GITHUB_SECRET"');
-}
-
-if (!process.env.FACEBOOK_CLIENT_ID) {
-  throw Error('Invalid/Missing environment variable: "FACEBOOK_CLIENT_ID"');
-}
-
-if (!process.env.FACEBOOK_CLIENT_SECRET) {
-  throw Error('Invalid/Missing environment variable: "FACEBOOK_CLIENT_SECRET"');
 }
 
 if (!process.env.DISCORD_CLIENT_ID) {
