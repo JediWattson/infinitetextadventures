@@ -43,8 +43,10 @@ export async function PUT(
 
     const actionsMsg = await messagesActions();
     const messages = await actionsMsg.getMessages(params.id);
-    const textArr = messages.rows.map((r) => r.text);
+    const textArr = messages.rows.map((r) => r.text);    
     const { text } = await streamToJSON(req.body);
+    if (text.length > 300) throw Error('Text string too long!')
+
     textArr.unshift(backstory);
     textArr.push(text);
     textArr.push(narrator);
@@ -52,7 +54,7 @@ export async function PUT(
     await actionsMsg.addMessage(userId, params.id, text);
     const narratorRes = await streamCompletetion(textArr.join("\n"));
     await actionsMsg.addMessage(userId, params.id, narratorRes);
-    return NextResponse.json({ text: narratorRes });
+    return NextResponse.json({ text: narrator + narratorRes });
   } catch (error) {
     console.error(error);
   }
