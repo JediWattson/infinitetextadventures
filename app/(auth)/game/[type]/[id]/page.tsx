@@ -5,8 +5,9 @@ import Chat from "@/components/chat";
 
 type GamePramsType = { params: { type: string, id: string } }
 
-export default function Game({ params: { id, type }}: GamePramsType) {
-  return <Chat gamePath={`/${type}/${id}`} />;
+export default async function Game({ params: { id, type }}: GamePramsType) {
+  const gameMeta = await getGameMeta(type);
+  return <Chat gameMeta={gameMeta} gamePath={`/${type}/${id}`} />;
 }
 
 export async function generateMetadata({ params: { type } }: GamePramsType): Promise<Metadata> {

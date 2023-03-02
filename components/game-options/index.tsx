@@ -27,8 +27,8 @@ export default function GameOptions({ options }: GameOptionsPropsType) {
   const text = loading ? "Creating..." : "Create a game";
   return (
     <>
-      {options.map(({ title, description, gameKey }) =>
-        <div className={styles.container}>
+      {options.map(({ title, description, gameKey }, i) =>
+        <div key={i} className={styles.container}>
           <h2>{title}</h2>
           <p>{description}</p>
           <Button onClick={() => handleClick(gameKey)} text={text} disabled={loading} />

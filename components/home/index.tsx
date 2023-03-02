@@ -10,7 +10,7 @@ export default function Home() {
       <p>
         all you need to do is sign in then create a game
         <br />
-        try out approach to making text adventures :D
+        try out my approach to making text adventures :D
       </p>
     </div>
   );

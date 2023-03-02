@@ -8,10 +8,12 @@ import Button from "../button";
 import Textarea from "../textarea";
 
 import styles from "./style.module.css";
+import { GameMetaType } from "@/lib/gameMeta";
 
 // speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
 
-const Chat = ({ gamePath }: { gamePath: string }) => {
+type ChatPropsType = { gamePath: string, gameMeta: GameMetaType }
+const Chat = ({ gamePath, gameMeta }: ChatPropsType) => {
   const [oracleSays, setOracle] = useState<string[]>([]);
 
   const gamePathRef = useRef<string | null>(null);
@@ -33,10 +35,10 @@ const Chat = ({ gamePath }: { gamePath: string }) => {
   const handleClick = async () => {
     if (!textValueRef.current) return;
 
-    const speaker = 'Detective:'
     const playerText = textValueRef.current.value;
     textValueRef.current.value = "";
 
+    const speaker = gameMeta.speaker
     const newChat = [...oracleSays, `${speaker} ${playerText}`]
     setOracle(newChat);
 
