@@ -7,11 +7,8 @@ import { useRouter } from "next/navigation";
 
 import styles from "./styles.module.css";
 
-const title = "The Oracle's Private Eye!";
-const description =
-  "You are a detective tasked with a mystery surrounding someone's death with three days to solve the murder. The Oracle will narrate an adventure explaining any questions or events that might occour for you actions.";
-
-export default function DashboardComponent() {
+type GameOptionsPropsType = { options: { title: string, description: string, gameKey: string }[] }
+export default function GameOptions({ options }: GameOptionsPropsType) {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -29,10 +26,14 @@ export default function DashboardComponent() {
   };
   const text = loading ? "Creating..." : "Create a game";
   return (
-    <div className={styles.container}>
-      <h2>{title}</h2>
-      <p>{description}</p>
-      <Button onClick={() => handleClick("OraclePrivateEye")} text={text} disabled={loading} />
-    </div>
-  );
+    <>
+      {options.map(({ title, description, gameKey }) =>
+        <div className={styles.container}>
+          <h2>{title}</h2>
+          <p>{description}</p>
+          <Button onClick={() => handleClick(gameKey)} text={text} disabled={loading} />
+        </div>
+      )}
+    </>
+  )
 }

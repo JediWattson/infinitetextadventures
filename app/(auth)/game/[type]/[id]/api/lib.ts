@@ -1,6 +1,5 @@
 import { Stream } from "stream";
 import { OpenAIApi, Configuration } from "openai";
-import { games } from '@/lib/games';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -56,8 +55,4 @@ export async function streamToJSON(stream: ReadableStream) {
 
   const result = await reader.read();
   return JSON.parse(decoder.decode(result.value));
-}
-
-export const getGameInfo = (type: string) => {
-  return games[type];
 }

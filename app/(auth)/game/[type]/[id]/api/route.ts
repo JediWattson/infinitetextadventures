@@ -7,7 +7,8 @@ import gamesActions from "@/db/mongo/games";
 import messagesActions from "@/db/postgres/messages";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-import { streamToJSON, streamCompletetion, getGameInfo } from "./lib";
+import { streamToJSON, streamCompletetion } from "./lib";
+import { getGameMeta } from "@/app/(auth)/dashboard/api/lib";
 
 type GamePramsType = { params: { type: string, id: string } }
 
@@ -20,9 +21,12 @@ export async function GET(
     const messages = await actionsMsg.getMessages(id);
     if (messages.rowCount === 0) {
       const session = await getServerSession(authOptions);
-      if (!session?.user?.id) return NextResponse.redirect('/');
+      if (!session?.user?.id) {
+        if (!process.env.NEXTAUTH_URL) throw Error('No URL set for NEXTAUTH_URL')
+        return NextResponse.redirect(process.env.NEXTAUTH_URL)
+      };
 
-      const { backstory, narrator } = getGameInfo(type);
+      const { backstory, narrator } = await getGameMeta(type);
       const oracleText = await streamCompletetion(
         [backstory, narrator].join("\n")
       );
@@ -34,7 +38,7 @@ export async function GET(
     return NextResponse.json(messages.rows);
   } catch (error) {
     console.error(error);
-    return NextResponse.redirect('/dashboard');
+    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/dashboard`);
   }
 }
 
@@ -59,7 +63,7 @@ export async function PUT(
      * then I send the convo with the user's text and 
      * have a completion done for the narrator.
      */
-    const { narrator, backstory } = getGameInfo(type)
+    const { narrator, backstory } = await getGameMeta(type)
     textArr.unshift(backstory);
     textArr.push(speaker + text);
     textArr.push(narrator);

@@ -1,10 +1,15 @@
-import Chat from "@/components/chat";
 import { Metadata } from "next";
+import { getGameMeta } from "@/app/(auth)/dashboard/api/lib";
 
-export default function Game({ params: { id, type }}: { params: { id: string, type: string } }) {
+import Chat from "@/components/chat";
+
+type GamePramsType = { params: { type: string, id: string } }
+
+export default function Game({ params: { id, type }}: GamePramsType) {
   return <Chat gamePath={`/${type}/${id}`} />;
 }
 
-export const metadata: Metadata = {
-  title: "The Oracle's Detective"
-};
+export async function generateMetadata({ params: { type } }: GamePramsType): Promise<Metadata> {
+  const gameMeta = await getGameMeta(type);
+  return { title: gameMeta.title }
+}
