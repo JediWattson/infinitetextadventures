@@ -1,21 +1,19 @@
 import type { NextApiRequest } from "next";
 
-import { NextResponse } from "next/server";
-import messagesActions from "@/db/postgres/messages";
-
-import { streamToJSON, streamCompletetion } from "./lib";
-import gamesActions from "@/db/mongo/games";
 import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
+
+import gamesActions from "@/db/mongo/games";
+import messagesActions from "@/db/postgres/messages";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-const backstory = `The Oracle is a narrator describing the adventure, while the detective askes questions and describes actions to carry along the story. This will be a text adventure murder mystery set in ancient Greece. The Oracle will give three days starting at the arrival to the murder scene for the detective to solve the murder or else something terrible will happen only the Oracle knows and explains after the said three days have finished. Every statement the detective makes be it action or question will cost time and the oracle will remind the detective how much time is left every response she gives. The Oracle starts by setting up the mystery.`;
-const narrator = "Oracle:";
+import { streamToJSON, streamCompletetion, getGameInfo } from "./lib";
 
-type ParamsType = { params: { type: string, id: string } }
+type GamePramsType = { params: { type: string, id: string } }
 
 export async function GET(
   req: NextApiRequest,
-  { params: { id, type } }: ParamsType
+  { params: { id, type } }: GamePramsType
 ) {
   try {
     const actionsMsg = await messagesActions();
@@ -24,6 +22,7 @@ export async function GET(
       const session = await getServerSession(authOptions);
       if (!session?.user?.id) return NextResponse.redirect('/');
 
+      const { backstory, narrator } = getGameInfo(type);
       const oracleText = await streamCompletetion(
         [backstory, narrator].join("\n")
       );
@@ -42,7 +41,7 @@ export async function GET(
 const concatSpeakerText = ({ speaker, text }: { speaker: string, text: string }) => `${speaker} ${text}`
 export async function PUT(
   req: NextApiRequest,
-  { params: { id, type } }: ParamsType
+  { params: { id, type } }: GamePramsType
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -60,6 +59,7 @@ export async function PUT(
      * then I send the convo with the user's text and 
      * have a completion done for the narrator.
      */
+    const { narrator, backstory } = getGameInfo(type)
     textArr.unshift(backstory);
     textArr.push(speaker + text);
     textArr.push(narrator);
