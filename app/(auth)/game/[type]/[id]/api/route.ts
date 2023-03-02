@@ -28,7 +28,7 @@ export async function GET(
 
       const { backstory, narrator } = await getGameMeta(type);
       const oracleText = await streamCompletetion(
-        [backstory, narrator].join("\n").trim()
+        [backstory, narrator].join("\n")
       );
       const actionsGame = await gamesActions();
       await actionsGame.updateStatus(id, "started");  
@@ -38,8 +38,8 @@ export async function GET(
 
     return NextResponse.json(messages.rows);
   } catch (error) {
-    console.error("ERROR:", error);
-    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/dashboard`);
+    console.error(error);
+    // return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/dashboard`);
   }
 }
 
