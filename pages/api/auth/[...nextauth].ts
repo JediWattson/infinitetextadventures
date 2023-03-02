@@ -5,41 +5,28 @@ import GithubProvider from "next-auth/providers/github";
 import FacebookProvider from "next-auth/providers/facebook";
 import DiscordProvider from "next-auth/providers/discord";
 
-
 if (!process.env.GITHUB_ID) {
-  throw Error(
-    'Invalid/Missing environment variable: "GITHUB_ID"'
-  );
+  throw Error('Invalid/Missing environment variable: "GITHUB_ID"');
 }
 
 if (!process.env.GITHUB_SECRET) {
-  throw Error(
-    'Invalid/Missing environment variable: "GITHUB_SECRET"'
-  );
+  throw Error('Invalid/Missing environment variable: "GITHUB_SECRET"');
 }
 
 if (!process.env.FACEBOOK_CLIENT_ID) {
-  throw Error(
-    'Invalid/Missing environment variable: "FACEBOOK_CLIENT_ID"'
-  );
+  throw Error('Invalid/Missing environment variable: "FACEBOOK_CLIENT_ID"');
 }
 
 if (!process.env.FACEBOOK_CLIENT_SECRET) {
-  throw Error(
-    'Invalid/Missing environment variable: "FACEBOOK_CLIENT_SECRET"'
-  );
+  throw Error('Invalid/Missing environment variable: "FACEBOOK_CLIENT_SECRET"');
 }
 
 if (!process.env.DISCORD_CLIENT_ID) {
-  throw Error(
-    'Invalid/Missing environment variable: "DISCORD_CLIENT_ID"'
-  );
+  throw Error('Invalid/Missing environment variable: "DISCORD_CLIENT_ID"');
 }
 
 if (!process.env.DISCORD_CLIENT_SECRET) {
-  throw Error(
-    'Invalid/Missing environment variable: "DISCORD_CLIENT_SECRET"'
-  );
+  throw Error('Invalid/Missing environment variable: "DISCORD_CLIENT_SECRET"');
 }
 
 declare interface DefaultSession {
@@ -74,8 +61,8 @@ export const authOptions = {
     }),
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET
-    })
+      clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    }),
   ],
 };
 

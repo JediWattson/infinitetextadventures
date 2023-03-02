@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { SyntheticEvent, useEffect, useRef, useState } from "react";
 
 import { getOracle, postOracle } from "./lib";
 
@@ -40,6 +40,9 @@ const Chat = ({ gameId }: { gameId: string }) => {
     setOracle([...chatArr, text]);
   };
 
+  const handleKeyUp = ({ key }: { key: string }) => {
+    if (key === "Enter") handleClick();
+  };
   return (
     <>
       <div ref={handleRef} className={styles.textBox}>
@@ -52,7 +55,11 @@ const Chat = ({ gameId }: { gameId: string }) => {
       </div>
       <div className={styles.actions}>
         <Button onClick={handleClick} text="Send" />
-        <Textarea textValueRef={textValueRef} className={styles.textarea} />
+        <Textarea
+          handleKeyUp={handleKeyUp}
+          textValueRef={textValueRef}
+          className={styles.textarea}
+        />
       </div>
     </>
   );

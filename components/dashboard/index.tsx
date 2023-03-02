@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import styles from "./styles.module.css";
 
 const title = "The Oracle's Private Eye!";
-const description = "You are a detective tasked with a mystery surrounding someone's death with three days to solve the murder. The Oracle will narrate an adventure explaining any questions or events that might occour for you actions."
+const description =
+  "You are a detective tasked with a mystery surrounding someone's death with three days to solve the murder. The Oracle will narrate an adventure explaining any questions or events that might occour for you actions.";
 
 export default function DashboardComponent() {
   const [loading, setLoading] = useState(false);

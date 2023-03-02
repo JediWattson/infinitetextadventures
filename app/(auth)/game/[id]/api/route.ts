@@ -21,8 +21,10 @@ export async function GET(
     if (messages.rowCount === 0) {
       const session = await getServerSession(authOptions);
       if (!session?.user?.id) throw Error("No userId found!");
-      
-      const oracleRes = await streamCompletetion([backstory, narrator].join("\n"));
+
+      const oracleRes = await streamCompletetion(
+        [backstory, narrator].join("\n")
+      );
       const text = narrator + oracleRes;
       await actionsMsg.addMessage(session?.user?.id, params.id, text);
       return NextResponse.json([{ text, gameId: params.id }]);
@@ -45,9 +47,9 @@ export async function PUT(
 
     const actionsMsg = await messagesActions();
     const messages = await actionsMsg.getMessages(params.id);
-    const textArr = messages.rows.map((r) => r.text);    
+    const textArr = messages.rows.map((r) => r.text);
     const { text } = await streamToJSON(req.body);
-    if (text.length > 300) throw Error('Text string too long!')
+    if (text.length > 300) throw Error("Text string too long!");
 
     textArr.unshift(backstory);
     textArr.push(text);
