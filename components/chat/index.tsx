@@ -1,13 +1,15 @@
 "use client";
 
-import React, { SyntheticEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import { getOracle, postOracle } from "./lib";
+import { getGame, postOracle } from "./lib";
 
 import Button from "../button";
 import Textarea from "../textarea";
 
 import styles from "./style.module.css";
+
+// speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
 
 const Chat = ({ gameId }: { gameId: string }) => {
   const [oracleSays, setOracle] = useState<string[]>([]);
@@ -17,7 +19,7 @@ const Chat = ({ gameId }: { gameId: string }) => {
     if (gameId === gameIdRef.current) return;
     gameIdRef.current = gameId;
     (async () => {
-      const textArr = await getOracle(gameId);
+      const textArr = await getGame(gameId);
       setOracle(textArr);
     })();
   }, [gameId]);
@@ -31,18 +33,21 @@ const Chat = ({ gameId }: { gameId: string }) => {
   const handleClick = async () => {
     if (!textValueRef.current) return;
 
-    const playerText = `Detective: ${textValueRef.current.value}`;
-    const chatArr = [...oracleSays, playerText];
-    setOracle(chatArr);
+    const speaker = 'Detective:'
+    const playerText = textValueRef.current.value;
     textValueRef.current.value = "";
 
-    const text = await postOracle(gameId, playerText);
-    setOracle([...chatArr, text]);
+    const newChat = [...oracleSays, `${speaker} ${playerText}`]
+    setOracle(newChat);
+
+    const text = await postOracle(gameId, { speaker, text: playerText });
+    setOracle([...newChat, text]);
   };
 
   const handleKeyUp = ({ key }: { key: string }) => {
     if (key === "Enter") handleClick();
   };
+  
   return (
     <>
       <div ref={handleRef} className={styles.textBox}>

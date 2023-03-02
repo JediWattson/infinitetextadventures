@@ -22,12 +22,11 @@ export async function GET(
       const session = await getServerSession(authOptions);
       if (!session?.user?.id) throw Error("No userId found!");
 
-      const oracleRes = await streamCompletetion(
+      const oracleText = await streamCompletetion(
         [backstory, narrator].join("\n")
       );
-      const text = narrator + oracleRes;
-      await actionsMsg.addMessage(session?.user?.id, params.id, text);
-      return NextResponse.json([{ text, gameId: params.id }]);
+      await actionsMsg.addMessage(params.id,  narrator, oracleText);
+      return NextResponse.json([{ text: oracleText, speaker: narrator}]);
     }
 
     return NextResponse.json(messages.rows);
@@ -48,17 +47,22 @@ export async function PUT(
     const actionsMsg = await messagesActions();
     const messages = await actionsMsg.getMessages(params.id);
     const textArr = messages.rows.map((r) => r.text);
-    const { text } = await streamToJSON(req.body);
+    const { text, speaker } = await streamToJSON(req.body);
     if (text.length > 300) throw Error("Text string too long!");
 
+    /**
+     * I add the backstory {system} to set up the story, 
+     * then I send the convo with the user's text and 
+     * have a completion done for the narrator.
+     */
     textArr.unshift(backstory);
-    textArr.push(text);
+    textArr.push(speaker + text);
     textArr.push(narrator);
 
-    await actionsMsg.addMessage(userId, params.id, text);
-    const narratorRes = await streamCompletetion(textArr.join("\n"));
-    await actionsMsg.addMessage(userId, params.id, narratorRes);
-    return NextResponse.json({ text: narrator + narratorRes });
+    await actionsMsg.addMessage(params.id, speaker, text);
+    const narratorText = (await streamCompletetion(textArr.join("\n"))).trim();
+    await actionsMsg.addMessage(params.id, narrator, narratorText);
+    return NextResponse.json({ speaker: narrator, text: narratorText });
   } catch (error) {
     console.error(error);
   }
