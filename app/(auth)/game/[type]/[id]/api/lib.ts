@@ -7,10 +7,24 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-function handleStream(stream: Stream) {
+
+export async function streamCompletetion(prompt: string) {
+  const completion: any = await openai.createCompletion(
+    {
+      model: "text-davinci-003",
+      prompt,
+      stream: true,
+      max_tokens: 230,
+      stop: ["\n"],
+      temperature: 0.8,
+      frequency_penalty: 0.7,
+    },
+    { responseType: "stream" }
+  );
+  
   return new Promise<string>((resolve, reject) => {
     let string = "";
-    stream.on("data", (data: ReadableStream) => {
+    completion.data.on("data", (data: ReadableStream) => {
       try {
         data
           .toString()
@@ -30,23 +44,6 @@ function handleStream(stream: Stream) {
       }
     });
   });
-}
-
-export async function streamCompletetion(prompt: string) {
-  const completion = await openai.createCompletion(
-    {
-      model: "text-davinci-003",
-      prompt,
-      stream: true,
-      max_tokens: 230,
-      stop: ["\n"],
-      temperature: 0.8,
-      frequency_penalty: 0.7,
-    },
-    { responseType: "stream" }
-  );
-
-  return handleStream(completion.data as any);
 }
 
 export async function streamToJSON(stream: ReadableStream) {

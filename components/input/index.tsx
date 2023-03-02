@@ -13,7 +13,7 @@ export default function Input({
   type?: string;
 }) {
   return (
-    <div className={style.container}>
+    <div className={style.inpuContainer}>
       <input ref={inputRef} type={type || "text"} className={style.input} />
       <label className={style.label}>{label}</label>
     </div>

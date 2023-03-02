@@ -12,12 +12,12 @@ export default async function gamesActions() {
     async createGame(userId: string, type: string) {
       const currentGame = await this.findCurrentGame(userId);
       if (currentGame) return currentGame._id;
-      const game = await games.insertOne({ userId, type, status: "started" });
+      const game = await games.insertOne({ userId, type });
       return game.insertedId;
     },
-    async finishGame(gameId: string) {
+    async updateStatus(gameId: string, status: string) {
       const _id = new ObjectId(gameId);
-      return games.updateOne({ _id }, { $set: { status: "finished" } });
-    },
+      return games.updateOne({ _id }, { $set: { status } });
+    }
   };
 }

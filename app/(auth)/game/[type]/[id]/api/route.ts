@@ -28,16 +28,17 @@ export async function GET(
 
       const { backstory, narrator } = await getGameMeta(type);
       const oracleText = await streamCompletetion(
-        [backstory, narrator].join("\n")
+        [backstory, narrator].join("\n").trim()
       );
-      
+      const actionsGame = await gamesActions();
+      await actionsGame.updateStatus(id, "started");  
       await actionsMsg.addMessage(id, type, narrator, oracleText);
       return NextResponse.json([{ text: oracleText, speaker: narrator}]);
     }
 
     return NextResponse.json(messages.rows);
   } catch (error) {
-    console.error(error);
+    console.error("ERROR:", error);
     return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/dashboard`);
   }
 }
@@ -83,7 +84,7 @@ export async function DELETE(
 ) {
   try {
     const actionsGame = await gamesActions();
-    await actionsGame.finishGame(params.id);
+    await actionsGame.updateStatus(params.id, "finished");
     return NextResponse.json({ status: 201 });
   } catch (error) {
     console.error(error);
