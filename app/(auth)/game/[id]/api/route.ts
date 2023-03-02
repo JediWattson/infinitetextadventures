@@ -19,9 +19,11 @@ export async function GET(
     const actionsMsg = await messagesActions();
     const messages = await actionsMsg.getMessages(params.id);
     if (messages.rowCount === 0) {
-      const text = await streamCompletetion([backstory, narrator].join("\n"));
       const session = await getServerSession(authOptions);
       if (!session?.user?.id) throw Error("No userId found!");
+      
+      const oracleRes = await streamCompletetion([backstory, narrator].join("\n"));
+      const text = narrator + oracleRes;
       await actionsMsg.addMessage(session?.user?.id, params.id, text);
       return NextResponse.json([{ text, gameId: params.id }]);
     }
