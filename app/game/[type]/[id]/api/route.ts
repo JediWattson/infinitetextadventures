@@ -9,47 +9,75 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import { streamToJSON, streamCompletetion } from "./lib";
 import { getGameMeta } from "@/app/(auth)/dashboard/api/lib";
+import { concatSpeakerText } from "@/lib/helpers";
 
 type GamePramsType = { params: { type: string, id: string } }
+type MiddlewareOptsType =  { playerId?: string }
 
-export async function GET(
+const gamesActionsMiddleware = (
+  next: (req: NextApiRequest, params: GamePramsType, options: MiddlewareOptsType ) => {}, optons?: { userAuth: boolean }
+) => async (
   req: NextApiRequest,
-  { params: { id, type } }: GamePramsType
+  { params }: GamePramsType  
+) => {
+  try {
+
+    const session = await getServerSession(authOptions);
+    console.log(session);
+    const userId = session?.user?.id;
+    if (optons?.userAuth && !userId) return NextResponse.redirect('/');
+
+    const actionsGame = await gamesActions();
+    const game = await actionsGame.findGameById(params.id);
+    if (optons?.userAuth && game?.userId !==  userId) return NextResponse.redirect('/');  
+    
+    return next(req, { params }, { playerId: game?.userId }); 
+  } catch (error) {
+    // console.error(error);
+  }
+}
+
+
+export type MessageResType = { playerId?: string, messages: { text: string, speaker: string }[] }
+
+async function get(
+  req: NextApiRequest,
+  { params: { id, type } }: GamePramsType,
+  { playerId }: MiddlewareOptsType
 ) {
   try {
+    const actionsGame = await gamesActions();
     const actionsMsg = await messagesActions();
-    const messages = await actionsMsg.getMessages(id);
-    if (messages.rowCount === 0) {
-      const session = await getServerSession(authOptions);
-      if (!session?.user?.id) {
-        if (!process.env.NEXTAUTH_URL) throw Error('No URL set for NEXTAUTH_URL')
-        return NextResponse.redirect(process.env.NEXTAUTH_URL)
-      };
 
+    const messagesRes = await actionsMsg.getMessages(id);
+    const messages = messagesRes.rows.map(m => ({ text: m.text, speaker: m.speaker }))
+
+    const resJson: MessageResType = { playerId, messages };
+    if (messagesRes.rowCount === 0) {
       const { backstory, narrator } = await getGameMeta(type);
       const oracleText = await streamCompletetion(
         [backstory, narrator].join("\n")
       );
-      const actionsGame = await gamesActions();
+
       await actionsGame.updateStatus(id, "started");  
       await actionsMsg.addMessage(id, type, narrator, oracleText);
-      return NextResponse.json([{ text: oracleText, speaker: narrator}]);
-    }
+      resJson.messages = [{ text: oracleText, speaker: narrator}]
+    } 
 
-    return NextResponse.json(messages.rows);
+    return NextResponse.json(resJson);
   } catch (error) {
     console.error(error);
-    // return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/dashboard`);
   }
 }
 
-const concatSpeakerText = ({ speaker, text }: { speaker: string, text: string }) => `${speaker} ${text}`
 export async function PUT(
   req: NextApiRequest,
   { params: { id, type } }: GamePramsType
 ) {
   try {
     const session = await getServerSession(authOptions);
+    console.log(session);
+
     const userId = session?.user?.id;
     if (!userId) return NextResponse.redirect('/');
     const { text, speaker } = await streamToJSON(req.body);    
@@ -78,15 +106,21 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
+async function del(
   req: NextApiRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    console.log("DELETED");
+    
     const actionsGame = await gamesActions();
     await actionsGame.updateStatus(params.id, "finished");
-    return NextResponse.json({ status: 201 });
+    return NextResponse.redirect('/dashboard');
   } catch (error) {
     console.error(error);
   }
 }
+
+export const GET = gamesActionsMiddleware((...args) => get(...args));
+// export const PUT = gamesActionsMiddleware((...args) => put(...args), { userAuth: true });
+export const DELETE = gamesActionsMiddleware((...args) => del(...args), { userAuth: true })

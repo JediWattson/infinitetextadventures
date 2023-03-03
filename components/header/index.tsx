@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import Link from "next/link";
 
 import { usePathname, useRouter } from "next/navigation";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 
 import { useAuthContext } from "@/app/context/auth";
 import Button from "@/components/button";
@@ -20,34 +21,10 @@ function Header() {
     if (pathname === "/" && isSession) router.replace("/dashboard");
   }, [pathname, isSession]);
 
-  const [endLoading, setEndLoading] = useState(false);
-  useEffect(() => {
-    setEndLoading(false);
-  }, [pathname]);
-  const handleEndGame = async () => {
-    try {
-      setEndLoading(true);
-      await fetch(`${pathname}/api`, { method: "DELETE" });
-      router.replace("/dashboard");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <nav className={styles.header}>
-      <h2 className={styles.title}>{"ITA!"}</h2>
+      <h2 className={styles.title}><Link className={styles.homeLink} href="/">{"ITA!"}</Link></h2>
       <ul className={styles.actions}>
-        {pathname?.includes("/game") && (
-          <li>
-            <Button
-              small
-              text={endLoading ? "Ending Game" : "End Game"}
-              onClick={handleEndGame}
-              disabled={endLoading}
-            />
-          </li>
-        )}
         <li>
           <Button
             small

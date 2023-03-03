@@ -1,31 +1,44 @@
 "use client";
 
-import type { Session } from "next-auth";
-
 import {
   createContext,
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
-const SessionContext = createContext<{
-  session?: Session | null;
-  setSession?: Dispatch<SetStateAction<Session | null>>;
-}>({});
+import type { Session } from "next-auth";
 
-export default function AuthContext({
+type SessionType = Session & { user: { id: string } } | null
+type AuthContextType = {
+  session?: SessionType;
+  setSession?: Dispatch<SetStateAction<SessionType>>;
+}
+
+const AuthContext = createContext<AuthContextType>({});
+export default function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<SessionType>(null);  
+  
+  useEffect(() => {
+    const getAuth = async () => {
+      const res = await fetch('/api/auth/session')
+      const session = await res.json()
+      setSession(session);
+    }
+    getAuth()
+  }, [])
+
   return (
-    <SessionContext.Provider value={{ session, setSession }}>
+    <AuthContext.Provider value={{ session, setSession }}>
       {children}
-    </SessionContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
-export const useAuthContext = () => useContext(SessionContext);
+export const useAuthContext = () => useContext(AuthContext);
