@@ -20,7 +20,7 @@ export default function Home({ games }: HomePropsType) {
               key={i}
               href={`/game/${type}/${gameId}`}
             >
-              {date.toLocaleString()}
+              {`${date.toLocaleString()} ${type}`}
             </Link>
           );
         })}
