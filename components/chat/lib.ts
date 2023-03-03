@@ -1,9 +1,12 @@
-// TODO: move somewhere cleaner
-const concatSpeakerText = ({ speaker, text }: { speaker: string, text: string }) => `${speaker} ${text}`
+import { concatSpeakerText } from "@/lib/helpers";
 
-export const postOracle = async (gameId: string, message: { speaker: string, text: string }) => {
-  const res = await fetch(`/game/${gameId}/api`, {
+export const postOracle = async (
+  gamePath: string,
+  message: { speaker: string; text: string }
+) => {
+  const res = await fetch(`/game/${gamePath}/api`, {
     method: "PUT",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -14,10 +17,4 @@ export const postOracle = async (gameId: string, message: { speaker: string, tex
 
   const data = await res.json();
   return concatSpeakerText(data);
-};
-
-export const getGame = async (gameId: string) => {
-  const res = await fetch(`/game/${gameId}/api`);
-  const data: [{ text: string, speaker: string }] = await res.json();
-  return data.map(concatSpeakerText);
 };

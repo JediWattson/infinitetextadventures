@@ -1,31 +1,26 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
-import { getGame, postOracle } from "./lib";
+import { postOracle } from "./lib";
 
 import Button from "../button";
 import Textarea from "../textarea";
 
 import styles from "./style.module.css";
 import { GameMetaType } from "@/lib/gameMeta";
+import { useAuthContext } from "@/app/context/auth";
+import { useRouter } from "next/navigation";
 
 // speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
 
-type ChatPropsType = { gamePath: string, gameMeta: GameMetaType }
-const Chat = ({ gamePath, gameMeta }: ChatPropsType) => {
-  const [oracleSays, setOracle] = useState<string[]>([]);
-
-  const gamePathRef = useRef<string | null>(null);
-  useEffect(() => {
-    if (gamePath === gamePathRef.current) return;
-    gamePathRef.current = gamePath;
-    (async () => {
-      const textArr = await getGame(gamePath);
-      setOracle(textArr);
-    })();
-  }, [gamePath]);
-
+type ChatPropsType = {
+  gamePath: string;
+  gameMeta: GameMetaType;
+  gameData: { playerId: string; oracleText: string[] };
+};
+const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
+  const [oracleSays, setOracle] = useState(gameData.oracleText);
   const handleRef = (ref: HTMLDivElement) => {
     if (!ref) return;
     ref.scrollTop = ref.scrollHeight;
@@ -38,8 +33,8 @@ const Chat = ({ gamePath, gameMeta }: ChatPropsType) => {
     const playerText = textValueRef.current.value;
     textValueRef.current.value = "";
 
-    const speaker = gameMeta.speaker
-    const newChat = [...oracleSays, `${speaker} ${playerText}`]
+    const speaker = gameMeta.speaker;
+    const newChat = [...oracleSays, `${speaker} ${playerText}`];
     setOracle(newChat);
 
     const text = await postOracle(gamePath, { speaker, text: playerText });
@@ -49,7 +44,18 @@ const Chat = ({ gamePath, gameMeta }: ChatPropsType) => {
   const handleKeyUp = ({ key }: { key: string }) => {
     if (key === "Enter") handleClick();
   };
-  
+
+  const router = useRouter();
+  const handleEndGame = async () => {
+    try {
+      await fetch(`/game/${gamePath}/api`, { method: "DELETE" });
+      await router.push("/dashboard");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const auth = useAuthContext();
   return (
     <>
       <div ref={handleRef} className={styles.textBox}>
@@ -60,14 +66,17 @@ const Chat = ({ gamePath, gameMeta }: ChatPropsType) => {
           </p>
         ))}
       </div>
-      <div className={styles.actions}>
-        <Button onClick={handleClick} text="Send" />
-        <Textarea
-          handleKeyUp={handleKeyUp}
-          textValueRef={textValueRef}
-          className={styles.textarea}
-        />
-      </div>
+      {gameData.playerId === auth.session?.user?.id && (
+        <div className={styles.actions}>
+          <Button onClick={handleClick} text="Send" />
+          <Textarea
+            handleKeyUp={handleKeyUp}
+            textValueRef={textValueRef}
+            className={styles.textarea}
+          />
+          <Button onClick={handleEndGame} text="End Game" />
+        </div>
+      )}
     </>
   );
 };

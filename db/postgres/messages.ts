@@ -8,7 +8,12 @@ export default async function messagesActions() {
         gameId,
       ]);
     },
-    async addMessage(gameId: string, gameType: string, speaker: string, text: string) {
+    async addMessage(
+      gameId: string,
+      gameType: string,
+      speaker: string,
+      text: string
+    ) {
       const pgConn = await pgCLient();
       return pgConn.query(
         "INSERT INTO messages (gameId, gameType, speaker, text) VALUES ($1, $2, $3, $4)",
