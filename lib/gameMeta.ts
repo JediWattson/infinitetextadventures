@@ -17,7 +17,12 @@ export const gameMeta: { [key: string]: GameMetaType } = {
             The Oracle will narrate an adventure explaining any questions or events that might occour for you actions.
         `,
         speaker: "Detective:",
-        backstory: "The Oracle is a narrator describing the adventure, while the detective askes questions and describes actions to carry along the story. This will be a text adventure murder mystery set in ancient Greece. The Oracle will give three days starting at the arrival to the murder scene for the detective to solve the murder or else something terrible will happen only the Oracle knows and explains after the said three days have finished. Every statement the detective makes be it action or question will cost time and the oracle will remind the detective how much time is left every response she gives. The Oracle starts by setting up the mystery.",
+        backstory: `
+            This will be a text adventure murder mystery set in ancient Greece.
+            The Oracle starts by setting up the mystery.
+            The detective only have 3 days to solve the case.
+            The Oracle is a narrator describing an adventure, and the detective askes questions and describes his actions.
+        `,
         narrator: "Oracle:",
     },
     JebsShootout: {
@@ -30,14 +35,11 @@ export const gameMeta: { [key: string]: GameMetaType } = {
         speaker: "Zakaria:",
         
         backstory: `
-            Jebidiah is a narrator describing the adventure, while Zakaria askes questions and describes his actions. 
-            Zakaria is a nomadic sharpshooter, and in this adventure he finds himself in trouble with bandits. 
-            Zakaria must stratigically place each bullet in a way that kills all of bandits.
-            The bandits can shoot back and injure or kill Zakaria.
-            Zakaria has only six bullets to kill the bad guys before they kill him. 
-            Zakaria can only shoot one time per turn and must write that he fired a bullet in some way. 
-            Jebidiah will provide him with the details and remind him of how many bullets he has left. 
-            Jebidiah starts with a description of the surroundings.
+            Jebidiah is a narrator describing the adventure to Zakaria.
+            Zakaria askes questions and describes his actions.
+            He is a nomadic sharpshooter who finds himself in trouble with bandits. 
+            Ht must go through town and take out all the bandits before they kill him.
+            Jebidiah starts with setting up a scene with Zakaria and the bandits.
         `,
         narrator: "Jebidiah:",
 
