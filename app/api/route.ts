@@ -7,6 +7,6 @@ export async function GET() {
         const games = await actionsGames.findLastGames(10);
         return NextResponse.json(games);   
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }

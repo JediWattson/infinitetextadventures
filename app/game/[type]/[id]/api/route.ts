@@ -14,6 +14,8 @@ import { concatSpeakerText } from "@/lib/helpers";
 type GamePramsType = { params: { type: string, id: string } }
 type MiddlewareOptsType =  { playerId?: string }
 
+const redirect = (path: string) => NextResponse.redirect(`${process.env.NEXTAUTH_URL}/${path}`);
+
 const gamesActionsMiddleware = (
   next: (req: NextApiRequest, params: GamePramsType, options: MiddlewareOptsType ) => {}, optons?: { userAuth: boolean }
 ) => async (
@@ -21,19 +23,17 @@ const gamesActionsMiddleware = (
   { params }: GamePramsType  
 ) => {
   try {
-
-    const session = await getServerSession(authOptions);
-    console.log(session);
+    const session = await getServerSession(authOptions);    
     const userId = session?.user?.id;
-    if (optons?.userAuth && !userId) return NextResponse.redirect('/');
+    if (optons?.userAuth && !userId) return redirect('/');
 
     const actionsGame = await gamesActions();
     const game = await actionsGame.findGameById(params.id);
-    if (optons?.userAuth && game?.userId !==  userId) return NextResponse.redirect('/');  
+    if (optons?.userAuth && game?.userId !==  userId) return redirect('/');  
     
     return next(req, { params }, { playerId: game?.userId }); 
   } catch (error) {
-    // console.error(error);
+    console.error(error);
   }
 }
 
@@ -54,7 +54,7 @@ async function get(
 
     const resJson: MessageResType = { playerId, messages };
     if (messagesRes.rowCount === 0) {
-      const { backstory, narrator } = await getGameMeta(type);
+      const { backstory, narrator } = await getGameMeta(type);      
       const oracleText = await streamCompletetion(
         [backstory, narrator].join("\n")
       );
@@ -70,16 +70,11 @@ async function get(
   }
 }
 
-export async function PUT(
+ async function put(
   req: NextApiRequest,
   { params: { id, type } }: GamePramsType
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    console.log(session);
-
-    const userId = session?.user?.id;
-    if (!userId) return NextResponse.redirect('/');
     const { text, speaker } = await streamToJSON(req.body);    
     if (text.length > 300) throw Error("Text string too long!");
 
@@ -111,16 +106,14 @@ async function del(
   { params }: { params: { id: string } }
 ) {
   try {
-    console.log("DELETED");
-    
     const actionsGame = await gamesActions();
-    await actionsGame.updateStatus(params.id, "finished");
-    return NextResponse.redirect('/dashboard');
+    await actionsGame.updateStatus(params.id, "finished");    
+    return;
   } catch (error) {
     console.error(error);
   }
 }
 
-export const GET = gamesActionsMiddleware((...args) => get(...args));
-// export const PUT = gamesActionsMiddleware((...args) => put(...args), { userAuth: true });
-export const DELETE = gamesActionsMiddleware((...args) => del(...args), { userAuth: true })
+export const GET = gamesActionsMiddleware(get);
+export const PUT = gamesActionsMiddleware(put, { userAuth: true });
+export const DELETE = gamesActionsMiddleware(del, { userAuth: true })

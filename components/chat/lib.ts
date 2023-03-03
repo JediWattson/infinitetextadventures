@@ -1,7 +1,7 @@
 import { concatSpeakerText } from "@/lib/helpers";
 
 export const postOracle = async (gamePath: string, message: { speaker: string, text: string }) => {
-  const res = await fetch(`api`, {
+  const res = await fetch(`/game/${gamePath}/api`, {
     method: "PUT",
     credentials: "include",
     headers: {

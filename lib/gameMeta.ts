@@ -19,9 +19,9 @@ export const gameMeta: { [key: string]: GameMetaType } = {
         speaker: "Detective:",
         backstory: `
             This will be a text adventure murder mystery set in ancient Greece.
-            The Oracle starts by setting up the mystery.
             The detective only have 3 days to solve the case.
             The Oracle is a narrator describing an adventure, and the detective askes questions and describes his actions.
+            The Oracle starts by setting up the mystery.
         `,
         narrator: "Oracle:",
     },

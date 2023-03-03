@@ -38,8 +38,12 @@ export default async function gamesActions() {
       return game.insertedId;
     },
     async updateStatus(gameId: string, status: string) {
-      const _id = new ObjectId(gameId);
-      return games.updateOne({ _id }, { $set: { status } });
+      try {
+        const _id = new ObjectId(gameId);      
+        return games.updateOne({ _id }, { $set: { status } });          
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 }

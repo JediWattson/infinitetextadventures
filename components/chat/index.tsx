@@ -10,6 +10,7 @@ import Textarea from "../textarea";
 import styles from "./style.module.css";
 import { GameMetaType } from "@/lib/gameMeta";
 import { useAuthContext } from "@/app/context/auth";
+import { useRouter } from "next/navigation";
 
 // speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
 
@@ -40,9 +41,11 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
     if (key === "Enter") handleClick();
   };
     
+  const router = useRouter()
   const handleEndGame = async () => {
     try {
-      await fetch(`api`, { method: "DELETE" });
+      await fetch(`/game/${gamePath}/api`, { method: "DELETE" });    
+      await router.push('/dashboard');
     } catch (error) {
       console.error(error);
     }
