@@ -14,7 +14,11 @@ import { useRouter } from "next/navigation";
 
 // speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
 
-type ChatPropsType = { gamePath: string, gameMeta: GameMetaType, gameData: { playerId: string, oracleText: string[]} }
+type ChatPropsType = {
+  gamePath: string;
+  gameMeta: GameMetaType;
+  gameData: { playerId: string; oracleText: string[] };
+};
 const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
   const [oracleSays, setOracle] = useState(gameData.oracleText);
   const handleRef = (ref: HTMLDivElement) => {
@@ -29,8 +33,8 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
     const playerText = textValueRef.current.value;
     textValueRef.current.value = "";
 
-    const speaker = gameMeta.speaker
-    const newChat = [...oracleSays, `${speaker} ${playerText}`]
+    const speaker = gameMeta.speaker;
+    const newChat = [...oracleSays, `${speaker} ${playerText}`];
     setOracle(newChat);
 
     const text = await postOracle(gamePath, { speaker, text: playerText });
@@ -40,18 +44,18 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
   const handleKeyUp = ({ key }: { key: string }) => {
     if (key === "Enter") handleClick();
   };
-    
-  const router = useRouter()
+
+  const router = useRouter();
   const handleEndGame = async () => {
     try {
-      await fetch(`/game/${gamePath}/api`, { method: "DELETE" });    
-      await router.push('/dashboard');
+      await fetch(`/game/${gamePath}/api`, { method: "DELETE" });
+      await router.push("/dashboard");
     } catch (error) {
       console.error(error);
     }
   };
-  
-  const auth = useAuthContext();  
+
+  const auth = useAuthContext();
   return (
     <>
       <div ref={handleRef} className={styles.textBox}>

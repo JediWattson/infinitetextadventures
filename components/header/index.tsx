@@ -13,14 +13,18 @@ function Header() {
   const auth = useAuthContext();
   const isSession = !!auth.session;
   const handleSignout = () => {
-    if (!auth.clearSession) throw Error('Clear session is undefined');
-    auth.clearSession()
-    signOut({ callbackUrl: process.env.NEXTAUTH_URL })
-  }
-  
+    if (!auth.clearSession) throw Error("Clear session is undefined");
+    auth.clearSession();
+    signOut({ callbackUrl: process.env.NEXTAUTH_URL });
+  };
+
   return (
     <nav className={styles.header}>
-      <h2 className={styles.title}><Link className={styles.homeLink} href="/">{"ITA!"}</Link></h2>
+      <h2 className={styles.title}>
+        <Link className={styles.homeLink} href="/">
+          {"ITA!"}
+        </Link>
+      </h2>
       <ul className={styles.actions}>
         <li>
           <Button

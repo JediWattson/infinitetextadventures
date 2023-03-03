@@ -11,12 +11,12 @@ import {
 
 import type { Session } from "next-auth";
 
-type SessionType = Session & { user: { id: string } } | null;
+type SessionType = (Session & { user: { id: string } }) | null;
 type AuthContextType = {
   session?: SessionType;
   setSession?: Dispatch<SetStateAction<SessionType>>;
-  clearSession?: () => void
-}
+  clearSession?: () => void;
+};
 
 const AuthContext = createContext<AuthContextType>({});
 export default function AuthProvider({
@@ -24,21 +24,21 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [session, setSession] = useState<SessionType>(null);  
-  
+  const [session, setSession] = useState<SessionType>(null);
+
   const clearSession = () => {
     setSession(null);
-  }
+  };
 
   useEffect(() => {
     const getAuth = async () => {
-      const res = await fetch('/api/auth/session')
-      const session = await res.json()
+      const res = await fetch("/api/auth/session");
+      const session = await res.json();
       if (Object.keys(session).length === 0) return;
       setSession(session);
-    }
-    getAuth()
-  }, [])
+    };
+    getAuth();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ session, setSession, clearSession }}>

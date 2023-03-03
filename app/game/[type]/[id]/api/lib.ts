@@ -7,7 +7,6 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-
 export async function streamCompletetion(prompt: string) {
   const completion: any = await openai.createCompletion(
     {
@@ -21,7 +20,7 @@ export async function streamCompletetion(prompt: string) {
     },
     { responseType: "stream" }
   );
-  
+
   return new Promise<string>((resolve, reject) => {
     let string = "";
     completion.data.on("data", (data: ReadableStream) => {
@@ -33,7 +32,7 @@ export async function streamCompletetion(prompt: string) {
           .forEach((line) => {
             const message = line.replace(/^data: /, "");
             if (message === "[DONE]") {
-              if (string === '') reject('Empty string sent')
+              if (string === "") reject("Empty string sent");
               resolve(string);
             } else {
               string += JSON.parse(message).choices[0].text;

@@ -1,9 +1,9 @@
-import {  gameMeta } from '@/lib/gameMeta';
+import { gameMeta } from "@/lib/gameMeta";
 
 export const getAllGames = async () => {
-    return gameMeta;
-}
+  return gameMeta;
+};
 
-export const getGameMeta = async (type: string) => {    
-    return gameMeta[type];
-}
+export const getGameMeta = async (type: string) => {
+  return gameMeta[type];
+};
