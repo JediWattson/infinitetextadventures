@@ -21,7 +21,7 @@ function Header() {
   return (
     <nav className={styles.header}>
       <h2 className={styles.title}>
-        <Link className={styles.homeLink} href="/">
+        <Link className={styles.homeLink} href={isSession ? "/dashboard" : "/"}>
           {"ITA!"}
         </Link>
       </h2>
