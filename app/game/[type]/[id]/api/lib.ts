@@ -1,4 +1,3 @@
-import { Stream } from "stream";
 import { OpenAIApi, Configuration } from "openai";
 
 const configuration = new Configuration({
@@ -11,12 +10,17 @@ export async function streamCompletetion(prompt: string) {
   const completion: any = await openai.createCompletion(
     {
       model: "text-davinci-003",
-      prompt,
       stream: true,
-      max_tokens: 230,
+
+      prompt,
+      max_tokens: 420,
+      
+      top_p: 0.73,
+      temperature: 0.6,
+      frequency_penalty: 0.33,
+      presence_penalty: 0.22,
       stop: ["\n"],
-      temperature: 0.8,
-      frequency_penalty: 0.7,
+
     },
     { responseType: "stream" }
   );

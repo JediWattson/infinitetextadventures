@@ -29,7 +29,7 @@ export const gameMeta: { [key: string]: GameMetaType } = {
         `,
     speaker: "Zakaria:",
 
-    backstory: `The is a text adventure set in a town in the Wild West. Jebidiah is the narrator describing the adventure to the player Zakaria. Zakaria askes questions and describes his actions to Jebidiah. He is a nomadic sharpshooter who finds himself in trouble with bandits. Jebidiah starts with creating a scenario.`,
+    backstory: `This is a text adventure set in a town in the Wild West. Jebidiah is the narrator describing the adventure to the player Zakaria. Zakaria askes questions and describes his actions to Jebidiah. He is a nomadic sharpshooter who finds himself in trouble with bandits. Jebidiah starts with creating a scenario.`,
     narrator: "Jebidiah:",
   },
 };

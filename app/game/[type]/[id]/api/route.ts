@@ -66,7 +66,7 @@ async function get(
     if (messagesRes.rowCount === 0) {
       const { backstory, narrator } = await getGameMeta(type);
       const oracleText = await streamCompletetion(
-        [backstory, narrator].join("\n")
+        [`system: ${backstory}`, narrator].join("\n")
       );
 
       await actionsGame.updateStatus(id, "started");
