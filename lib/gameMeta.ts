@@ -17,30 +17,19 @@ export const gameMeta: { [key: string]: GameMetaType } = {
             The Oracle will narrate an adventure explaining any questions or events that might occour for you actions.
         `,
     speaker: "Detective:",
-    backstory: `
-            This will be a text adventure murder mystery set in ancient Greece.
-            The detective only have 3 days to solve the case.
-            The Oracle is a narrator describing an adventure, and the detective askes questions and describes his actions.
-            The Oracle starts by setting up the mystery.
-        `,
+    backstory: `This is a text adventure about a murder mystery set in ancient Greece. The detective only has 3 days to solve the case. The detective will ask questions and explain actions, while the Oracle narrates the result. The Oracle starts by setting up the mystery.`,
     narrator: "Oracle:",
   },
   JebsShootout: {
     title: "Shootout at Jeb's Corral",
     description: `
-            You're a sharpshooter with only 6 bullets to take out a troublesome gang before they introduce you to this town's UNDERTAKER!!!
-            Jebidiah will narrate as you ask questions about your surroundings and describe the target you intend to hit.
+            You're a sharpshooter, Zakaria, who has to take out a troublesome gang before they introduce you to this town's UNDERTAKER!!!
+            Jebidiah will narrate as you ask questions about your surroundings and describe the targets you intend to hit.
             Good luck out there partner!
         `,
     speaker: "Zakaria:",
 
-    backstory: `
-            Jebidiah is a narrator describing the adventure to Zakaria.
-            Zakaria askes questions and describes his actions.
-            He is a nomadic sharpshooter who finds himself in trouble with bandits. 
-            Ht must go through town and take out all the bandits before they kill him.
-            Jebidiah starts with setting up a scene with Zakaria and the bandits.
-        `,
+    backstory: `The is a text adventure set in a town in the Wild West. Jebidiah is the narrator describing the adventure to the player Zakaria. Zakaria askes questions and describes his actions to Jebidiah. He is a nomadic sharpshooter who finds himself in trouble with bandits. Jebidiah starts with creating a scenario.`,
     narrator: "Jebidiah:",
   },
 };

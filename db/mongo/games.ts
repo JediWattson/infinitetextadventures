@@ -26,15 +26,15 @@ export default async function gamesActions() {
             },
           },
           {
+            $sort: { gameId: -1 },
+          },
+          {
             $limit: limit,
           },
           {
             $addFields: {
               createdAt: { $toDate: "$gameId" },
             },
-          },
-          {
-            $sort: { createdAt: 1 },
           },
         ])
         .toArray();

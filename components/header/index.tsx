@@ -15,7 +15,7 @@ function Header() {
   const handleSignout = () => {
     if (!auth.clearSession) throw Error("Clear session is undefined");
     auth.clearSession();
-    signOut({ callbackUrl: process.env.NEXTAUTH_URL });
+    signOut();
   };
 
   return (
