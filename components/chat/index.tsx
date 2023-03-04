@@ -31,6 +31,7 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
     if (!textValueRef.current) return;
 
     const playerText = textValueRef.current.value;
+    if (playerText === "") return;
     textValueRef.current.value = "";
 
     const speaker = gameMeta.speaker;
@@ -50,12 +51,15 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
     try {
       await fetch(`/game/${gamePath}/api`, { method: "DELETE" });
       await router.push("/dashboard");
+      setIsExpanded(false);
     } catch (error) {
       console.error(error);
     }
   };
 
   const auth = useAuthContext();
+
+  const [isExpanded, setIsExpanded] = useState(false);
   return (
     <>
       <div ref={handleRef} className={styles.textBox}>
@@ -68,13 +72,20 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
       </div>
       {gameData.playerId === auth.session?.user?.id && (
         <div className={styles.actions}>
-          <Button onClick={handleClick} text="Send" />
+          {isExpanded ? (
+            <Button onClick={handleEndGame} text="End Game" />
+          ) : (
+            <Button onClick={() => setIsExpanded(true)} text=">>" />
+          )}
+          
+          
           <Textarea
+            onFocus={() => setIsExpanded(false)}
             handleKeyUp={handleKeyUp}
             textValueRef={textValueRef}
             className={styles.textarea}
           />
-          <Button onClick={handleEndGame} text="End Game" />
+          <Button onClick={handleClick} text="Send" />
         </div>
       )}
     </>
