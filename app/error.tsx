@@ -25,15 +25,14 @@ export default function Error({
       margin: "auto"
     }}>
 
-      <h2>If at first you don't succeed, try</h2>
+      <h2>{`If at first you don't succeed, try`}</h2>
       <Button
         text="Try again"
         onClick={
-          // Attempt to recover by trying to re-render the segment
           () => reset()
         }
       />
-      <p>This is brought you to by some weird error I meant put in here</p>
+      <p>{`This is brought you to by some weird error I meant put in here`}</p>
     </div>
   );
 }
