@@ -6,7 +6,12 @@ if (!process.env.MONGODB_URI) {
   throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
 }
 
-const uri = process.env.MONGODB_URI;
+if (!process.env.MONGDB_NAME) {
+  throw new Error('Invalid/Missing environment variable: "MONGDB_NAME"');
+}
+
+
+const uri = `${process.env.MONGODB_URI}/${process.env.MONGDB_NAME}`;
 const options = {};
 
 const mongoClient =
@@ -15,7 +20,7 @@ if (process.env.NODE_ENV !== "production") globalForMongo.mongo = mongoClient;
 
 export async function conn() {
   const clientConn = await mongoClient;
-  return clientConn.db("dashboard");
+  return clientConn.db();
 }
 
 export default mongoClient;

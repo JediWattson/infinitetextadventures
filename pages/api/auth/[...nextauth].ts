@@ -34,8 +34,13 @@ declare interface DefaultSession {
 }
 
 export const authOptions = {
-  adapter: MongoDBAdapter(mongoClient),
+
   // pages: { newUser: '/auth/new-user' },
+
+  session: {
+    maxAge: 30 * 24 * 60 * 60,
+  },
+
   callbacks: {
     async session({
       session,
@@ -50,6 +55,8 @@ export const authOptions = {
       return session;
     },
   },
+
+  adapter: MongoDBAdapter(mongoClient),
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
