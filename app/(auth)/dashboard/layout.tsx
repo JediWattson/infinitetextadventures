@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import gamesActions from "@/db/mongo/games";
+import gamesActions from "@/db/mongo/collections/games";
 
 const checkGames = async () => {
   const session = await getServerSession(authOptions);

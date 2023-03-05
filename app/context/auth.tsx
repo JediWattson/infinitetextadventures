@@ -6,45 +6,65 @@ import {
   SetStateAction,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
-import type { Session } from "next-auth";
 
-type SessionType = (Session & { user: { id: string } }) | null;
+
+type PlayerType = { role: "admin" | "player", _id: string } | null;
 type AuthContextType = {
-  session?: SessionType;
-  setSession?: Dispatch<SetStateAction<SessionType>>;
-  clearSession?: () => void;
+  player?: PlayerType
+  setPlayer?: Dispatch<SetStateAction<PlayerType>>;
+  clearPlayer?: () => void;
 };
 
-const AuthContext = createContext<AuthContextType>({});
+const getPlayer = async () => {
+  try {
+    const res = await fetch("/player/api");
+    const player = await res.json();
+    if (Object.keys(player).length === 0) return;
+  
+    if (!player.createNew) return player;
+    const newRes = await fetch("player/api", { method: "PUT" });
+    return newRes.json();    
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const PlayerContext = createContext<AuthContextType>({});
 export default function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [session, setSession] = useState<SessionType>(null);
+  const [player, setPlayer] = useState<PlayerType>(null);
 
-  const clearSession = () => {
-    setSession(null);
+  const clearPlayer = () => {
+    setPlayer(null);
   };
 
+  const playerGetRef = useRef(false);
   useEffect(() => {
+    if (playerGetRef.current) return;
+    playerGetRef.current = true;
     const getAuth = async () => {
-      const res = await fetch("/api/auth/session");
-      const session = await res.json();
-      if (Object.keys(session).length === 0) return;
-      setSession(session);
+      try {
+        const player = await getPlayer()
+        setPlayer(player); 
+      } catch (error) {
+        console.error(error);
+      }
     };
     getAuth();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, setSession, clearSession }}>
+    <PlayerContext.Provider value={{ player, setPlayer, clearPlayer }}>
       {children}
-    </AuthContext.Provider>
+    </PlayerContext.Provider>
   );
 }
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuthContext = () => useContext(PlayerContext);

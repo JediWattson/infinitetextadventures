@@ -11,10 +11,10 @@ import styles from "./styles.module.css";
 
 function Header() {
   const auth = useAuthContext();
-  const isSession = !!auth.session;
+  const isSession = !!auth.player;
   const handleSignout = () => {
-    if (!auth.clearSession) throw Error("Clear session is undefined");
-    auth.clearSession();
+    if (!auth.clearPlayer) throw Error("Clear session is undefined");
+    auth.clearPlayer();
     signOut();
   };
 

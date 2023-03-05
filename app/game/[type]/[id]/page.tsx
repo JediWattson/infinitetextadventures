@@ -11,11 +11,9 @@ const getGame = async (gamePath: string) => {
     cache: "no-store",
   });
   const data = await res.json();
-
-  return {
-    playerId: data.playerId,
-    oracleText: data.messages.map(concatSpeakerText),
-  };
+  data.oracleText = data.messages.map(concatSpeakerText)
+  delete data.messages;
+  return data;
 };
 
 export default async function Game({ params: { id, type } }: GamePramsType) {

@@ -13,8 +13,8 @@ export const postOracle = async (
     body: JSON.stringify(message),
   });
 
-  if (res.status >= 400) throw Error(`Server response status ${res.status}`);
-
   const data = await res.json();
+  if (data.unathorized || data.gameNotFound) throw Error(`Unathorized`);
+
   return concatSpeakerText(data);
 };

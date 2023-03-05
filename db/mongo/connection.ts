@@ -23,4 +23,9 @@ export async function conn() {
   return clientConn.db();
 }
 
+export async function getCol(name: string) {
+  const db = await conn();
+  return db.collection(name);
+}
+
 export default mongoClient;

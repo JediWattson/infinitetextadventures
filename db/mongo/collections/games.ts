@@ -1,13 +1,12 @@
 import { ObjectId } from "mongodb";
-import { conn } from "./connection";
+import { getCol } from "../connection";
 
 export default async function gamesActions() {
-  const db = await conn();
-  const games = db.collection("games");
+  const games = await getCol("games");
 
   return {
-    async findCurrentGame(userId: string) {
-      return games.findOne({ userId, status: "started" });
+    async findCurrentGame(playerId: string) {
+      return games.findOne({ playerId, status: "started" });
     },
     async findGameById(gameId: string) {
       return games.findOne({ _id: new ObjectId(gameId) });
@@ -22,7 +21,7 @@ export default async function gamesActions() {
             $project: {
               _id: 0,
               status: 0,
-              userId: 0,
+              playerId: 0,
             },
           },
           {
@@ -39,10 +38,10 @@ export default async function gamesActions() {
         ])
         .toArray();
     },
-    async createGame(userId: string, type: string) {
-      const currentGame = await this.findCurrentGame(userId);
+    async createGame(playerId: string, type: string) {
+      const currentGame = await this.findCurrentGame(playerId);
       if (currentGame) return currentGame._id;
-      const game = await games.insertOne({ userId, type });
+      const game = await games.insertOne({ playerId, type });
       return game.insertedId;
     },
     async updateStatus(gameId: string, status: string) {

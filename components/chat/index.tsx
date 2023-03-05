@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 type ChatPropsType = {
   gamePath: string;
   gameMeta: GameMetaType;
-  gameData: { playerId: string; oracleText: string[] };
+  gameData: { isStarted: boolean, playerId: string; oracleText: string[] };
 };
 const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
   const [oracleSays, setOracle] = useState(gameData.oracleText);
@@ -49,16 +49,18 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
   const router = useRouter();
   const handleEndGame = async () => {
     try {
-      await fetch(`/game/${gamePath}/api`, { method: "DELETE" });
-      await router.push("/dashboard");
+      const res = await fetch(`/game/${gamePath}/api`, { method: "DELETE" });      
+      
+      // TODO: add some error handling
+      const data = await res.json();      
       setIsExpanded(false);
+      await router.push("/dashboard");
     } catch (error) {
       console.error(error);
     }
   };
 
-  const auth = useAuthContext();
-
+  const auth = useAuthContext();  
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <>
@@ -70,12 +72,12 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
           </p>
         ))}
       </div>
-      {gameData.playerId === auth.session?.user?.id && (
+      {gameData.playerId === auth.player?._id && gameData.isStarted && (
         <div className={styles.actions}>
           {isExpanded ? (
             <Button onClick={handleEndGame} text="End Game" />
           ) : (
-            <Button onClick={() => setIsExpanded(true)} text=">>" />
+            <Button onClick={() => setIsExpanded(true)} text="Opts >>" />
           )}
 
           <Textarea

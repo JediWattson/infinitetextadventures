@@ -3,19 +3,17 @@ import type { NextApiRequest } from "next";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-import gamesActions from "@/db/mongo/games";
+import gamesActions from "@/db/mongo/collections/games";
 import messagesActions from "@/db/postgres/messages";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import { streamToJSON, streamCompletetion } from "./lib";
 import { getGameMeta } from "@/app/(auth)/dashboard/api/lib";
 import { concatSpeakerText } from "@/lib/helpers";
+import playersActions from "@/db/mongo/collections/players";
 
 type GamePramsType = { params: { type: string; id: string } };
-type MiddlewareOptsType = { playerId?: string };
-
-const redirect = (path: string) =>
-  NextResponse.redirect(`${process.env.NEXTAUTH_URL}/${path}`);
+type MiddlewareOptsType = { playerId?: string, isStarted: boolean };
 
 const gamesActionsMiddleware =
   (
@@ -28,29 +26,36 @@ const gamesActionsMiddleware =
   ) =>
   async (req: NextApiRequest, { params }: GamePramsType) => {
     try {
-      const session = await getServerSession(authOptions);
-      const userId = session?.user?.id;
-      if (optons?.userAuth && !userId) return redirect("/");
-
       const actionsGame = await gamesActions();
       const game = await actionsGame.findGameById(params.id);
-      if (optons?.userAuth && game?.userId !== userId) return redirect("/");
+      if (!game) return NextResponse.json({ gameNotFound: true });
+      const options = { playerId: game.playerId, isStarted: game.status === "started" };
 
-      return next(req, { params }, { playerId: game?.userId });
+      if (optons?.userAuth) {
+        const session = await getServerSession(authOptions);
+        const userId = session?.user?.id;
+        
+        if (!userId || game.status !== "started" ) return NextResponse.json({ unathorized: true });
+
+        const actionsPlayer = await playersActions();
+        const player = await actionsPlayer.findByUserId(userId);        
+        if (game.playerId !== player?._id.toString()) return NextResponse.json({ unathorized: true });
+      }
+
+      return next(req, { params }, options);
     } catch (error) {
       console.error(error);
     }
   };
 
-export type MessageResType = {
-  playerId?: string;
+export type MessageResType = MiddlewareOptsType & {
   messages: { text: string; speaker: string }[];
 };
 
 async function get(
   req: NextApiRequest,
   { params: { id, type } }: GamePramsType,
-  { playerId }: MiddlewareOptsType
+  { playerId, isStarted }: MiddlewareOptsType
 ) {
   try {
     const actionsGame = await gamesActions();
@@ -62,7 +67,7 @@ async function get(
       speaker: m.speaker,
     }));
 
-    const resJson: MessageResType = { playerId, messages };
+    const resJson: MessageResType = { isStarted, playerId, messages };
     if (messagesRes.rowCount === 0) {
       const { backstory, narrator } = await getGameMeta(type);
       const oracleText = await streamCompletetion(
@@ -70,10 +75,11 @@ async function get(
       );
 
       await actionsGame.updateStatus(id, "started");
+      resJson.isStarted = true;
       await actionsMsg.addMessage(id, type, narrator, oracleText);
       resJson.messages = [{ text: oracleText, speaker: narrator }];
     }
-
+    
     return NextResponse.json(resJson);
   } catch (error) {
     console.error(error);
@@ -119,7 +125,7 @@ async function del(
 ) {
   try {
     const actionsGame = await gamesActions();
-    await actionsGame.updateStatus(params.id, "finished");
+    await actionsGame.updateStatus(params.id, "finished");    
     return NextResponse.json({});
   } catch (error) {
     console.error(error);
