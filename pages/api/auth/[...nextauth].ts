@@ -3,6 +3,15 @@ import mongoClient from "@/db/mongo/connection";
 import NextAuth, { Session, User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import DiscordProvider from "next-auth/providers/discord";
+import RedditProvider from 'next-auth/providers/reddit';
+
+if (!process.env.REDDIT_CLIENT_ID) {
+  throw Error('mission env var: "REDDIT_CLIENT_ID');
+}
+
+if (!process.env.REDDIT_CLIENT_SECRET) {
+  throw Error('mission env var: "REDDIT_CLIENT_SECRET');
+}
 
 if (!process.env.GITHUB_ID) {
   throw Error('Invalid/Missing environment variable: "GITHUB_ID"');
@@ -28,10 +37,6 @@ export const authOptions = {
   adapter: MongoDBAdapter(mongoClient),
   // pages: { newUser: '/auth/new-user' },
   callbacks: {
-    async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
-      if (new URL(url).pathname === "/") return url + "dashboard";
-      return url;
-    },
     async session({
       session,
       user,
@@ -53,6 +58,15 @@ export const authOptions = {
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    }),
+    RedditProvider({
+      clientId: process.env.REDDIT_CLIENT_ID,
+      clientSecret: process.env.REDDIT_CLIENT_SECRET,
+      authorization: {
+        params: {
+          duration: 'permanent',
+        },
+      },
     }),
   ],
 };

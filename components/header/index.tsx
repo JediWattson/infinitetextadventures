@@ -17,7 +17,7 @@ function Header() {
     auth.clearSession();
     signOut();
   };
-
+  
   return (
     <nav className={styles.header}>
       <h2 className={styles.title}>
@@ -30,7 +30,7 @@ function Header() {
           <Button
             small
             text={`Sign ${isSession ? "Out" : "In"}`}
-            onClick={isSession ? handleSignout : signIn}
+            onClick={isSession ? handleSignout : () => signIn(undefined, { callbackUrl: `/dashboard` })}
           />
         </li>
       </ul>

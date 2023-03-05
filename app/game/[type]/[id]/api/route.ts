@@ -118,8 +118,8 @@ async function del(
   try {
     const actionsGame = await gamesActions();
     await actionsGame.updateStatus(params.id, "finished");
-    return;
-  } catch (error) {
+    return NextResponse.json({})
+  } catch (error) {    
     console.error(error);
   }
 }
