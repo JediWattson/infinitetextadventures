@@ -59,15 +59,7 @@ export const authOptions = {
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
     }),
-    RedditProvider({
-      clientId: process.env.REDDIT_CLIENT_ID,
-      clientSecret: process.env.REDDIT_CLIENT_SECRET,
-      authorization: {
-        params: {
-          duration: "permanent",
-        },
-      },
-    }),
+
   ],
 };
 
