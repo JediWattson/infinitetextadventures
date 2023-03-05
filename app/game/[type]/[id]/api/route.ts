@@ -86,7 +86,8 @@ async function put(
 ) {
   try {
     const { text, speaker } = await streamToJSON(req.body);
-    if (text.length > 300 || text.length === 0)
+    const cleanText = text.trim()    
+    if (cleanText.length > 300 || cleanText.length === 0)
       throw Error("Text string invalid!");
 
     const actionsMsg = await messagesActions();
@@ -100,10 +101,10 @@ async function put(
      */
     const { narrator, backstory } = await getGameMeta(type);
     textArr.unshift(backstory);
-    textArr.push(speaker + text);
+    textArr.push(speaker + cleanText);
     textArr.push(narrator);
 
-    await actionsMsg.addMessage(id, type, speaker, text);
+    await actionsMsg.addMessage(id, type, speaker, cleanText);
     const narratorText = await streamCompletetion(textArr.join("\n"));
     await actionsMsg.addMessage(id, type, narrator, narratorText);
     return NextResponse.json({ speaker: narrator, text: narratorText });

@@ -30,7 +30,7 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
   const handleClick = async () => {
     if (!textValueRef.current) return;
 
-    const playerText = textValueRef.current.value;
+    const playerText = textValueRef.current.value.trim();
     if (playerText === "") return;
     textValueRef.current.value = "";
 
