@@ -14,13 +14,12 @@ export async function streamCompletetion(prompt: string) {
 
       prompt,
       max_tokens: 420,
-      
+
       top_p: 0.73,
       temperature: 0.6,
       frequency_penalty: 0.33,
       presence_penalty: 0.22,
       stop: ["\n"],
-
     },
     { responseType: "stream" }
   );

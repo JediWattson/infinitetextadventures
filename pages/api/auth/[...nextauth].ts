@@ -3,7 +3,7 @@ import mongoClient from "@/db/mongo/connection";
 import NextAuth, { Session, User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import DiscordProvider from "next-auth/providers/discord";
-import RedditProvider from 'next-auth/providers/reddit';
+import RedditProvider from "next-auth/providers/reddit";
 
 if (!process.env.REDDIT_CLIENT_ID) {
   throw Error('mission env var: "REDDIT_CLIENT_ID');
@@ -64,7 +64,7 @@ export const authOptions = {
       clientSecret: process.env.REDDIT_CLIENT_SECRET,
       authorization: {
         params: {
-          duration: 'permanent',
+          duration: "permanent",
         },
       },
     }),

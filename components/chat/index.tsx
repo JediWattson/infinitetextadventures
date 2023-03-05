@@ -77,8 +77,7 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
           ) : (
             <Button onClick={() => setIsExpanded(true)} text=">>" />
           )}
-          
-          
+
           <Textarea
             onFocus={() => setIsExpanded(false)}
             handleKeyUp={handleKeyUp}

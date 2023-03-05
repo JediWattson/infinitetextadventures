@@ -86,7 +86,8 @@ async function put(
 ) {
   try {
     const { text, speaker } = await streamToJSON(req.body);
-    if (text.length > 300 || text.length === 0) throw Error("Text string invalid!");
+    if (text.length > 300 || text.length === 0)
+      throw Error("Text string invalid!");
 
     const actionsMsg = await messagesActions();
     const messages = await actionsMsg.getMessages(id);
@@ -118,8 +119,8 @@ async function del(
   try {
     const actionsGame = await gamesActions();
     await actionsGame.updateStatus(params.id, "finished");
-    return NextResponse.json({})
-  } catch (error) {    
+    return NextResponse.json({});
+  } catch (error) {
     console.error(error);
   }
 }
