@@ -1,0 +1,14 @@
+.adminContainer {
+    /* height: 100%; */
+    text-align: center;
+}
+
+.modalContainer {
+    text-align: center;
+}
+
+.modalButtons {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}

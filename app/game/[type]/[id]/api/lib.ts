@@ -48,7 +48,7 @@ export async function streamCompletetion(prompt: string) {
   });
 }
 
-export async function streamToJSON(stream: ReadableStream) {
+export async function streamToJSON(stream: ReadableStream<Uint8Array>) {
   const reader = stream.getReader();
   let decoder = new TextDecoder("utf-8");
 

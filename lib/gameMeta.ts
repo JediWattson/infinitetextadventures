@@ -12,14 +12,12 @@ export type GameMetaType = {
 export const gameMeta: { [key: string]: GameMetaType } = {
   OraclesPrivateEye: {
     title: "The Oracle's Private Eye",
-    description: `
-            You are a detective tasked with a mystery surrounding someone's death with three days to solve the murder. 
-            The Oracle will narrate an adventure explaining any questions or events that might occour for you actions.
-        `,
-    speaker: "Detective:",
+    description: `You are a detective tasked with a mystery surrounding someone's death with three days to solve the murder. The Oracle will narrate an adventure explaining any questions or events that might occour for you actions.`,
     backstory: `This is a text adventure about a murder mystery set in ancient Greece. The detective only has 3 days to solve the case. The detective will ask questions and explain actions, while the Oracle narrates the result. The Oracle starts by setting up the mystery.`,
-    narrator: "Oracle:",
+    speaker: "Detective",
+    narrator: "Oracle",
   },
+
   JebsShootout: {
     title: "Shootout at Jeb's Corral",
     description: `
