@@ -7,19 +7,18 @@ import {
   useContext,
   useEffect,
   useRef,
+  ReactNode,
   useState,
 } from "react";
 
-
-
 type PlayerType = { role: "admin" | "player", _id: string } | null;
-type AuthContextType = {
+type PlayerContextType = {
   player?: PlayerType
   setPlayer?: Dispatch<SetStateAction<PlayerType>>;
   clearPlayer?: () => void;
 };
 
-const getPlayer = async () => {
+const getPlayerData = async () => {
   try {
     const res = await fetch("/player/api");
     const player = await res.json();
@@ -33,11 +32,11 @@ const getPlayer = async () => {
   }
 }
 
-const PlayerContext = createContext<AuthContextType>({});
-export default function AuthProvider({
+const PlayerContext = createContext<PlayerContextType>({});
+export default function PlayerProvider({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const [player, setPlayer] = useState<PlayerType>(null);
 
@@ -49,15 +48,15 @@ export default function AuthProvider({
   useEffect(() => {
     if (playerGetRef.current) return;
     playerGetRef.current = true;
-    const getAuth = async () => {
+    const getPlayer = async () => {
       try {
-        const player = await getPlayer()
+        const player = await getPlayerData()
         setPlayer(player); 
       } catch (error) {
         console.error(error);
       }
     };
-    getAuth();
+    getPlayer();
   }, []);
 
   return (
@@ -67,4 +66,4 @@ export default function AuthProvider({
   );
 }
 
-export const useAuthContext = () => useContext(PlayerContext);
+export const usePlayerContext = () => useContext(PlayerContext);

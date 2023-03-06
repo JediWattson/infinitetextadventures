@@ -9,7 +9,7 @@ import Textarea from "../textarea";
 
 import styles from "./style.module.css";
 import { GameMetaType } from "@/lib/gameMeta";
-import { useAuthContext } from "@/app/context/auth";
+import { usePlayerContext } from "@/app/context/player";
 import { useRouter } from "next/navigation";
 
 // speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
@@ -60,7 +60,7 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
     }
   };
 
-  const auth = useAuthContext();  
+  const { player } = usePlayerContext();  
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <>
@@ -72,7 +72,7 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
           </p>
         ))}
       </div>
-      {gameData.playerId === auth.player?._id && gameData.isStarted && (
+      {gameData.playerId === player?._id && gameData.isStarted && (
         <div className={styles.actions}>
           {isExpanded ? (
             <Button onClick={handleEndGame} text="End Game" />

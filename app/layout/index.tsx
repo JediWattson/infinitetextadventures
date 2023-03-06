@@ -1,5 +1,5 @@
 import { Source_Sans_Pro } from "next/font/google";
-import AuthContext from "../context/auth";
+import AuthContext from "../context/player";
 import Header from "@/components/header";
 
 import "./globals.css";
