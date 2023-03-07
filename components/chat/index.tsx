@@ -2,21 +2,21 @@
 
 import React, { useRef, useState } from "react";
 
-import { postOracle } from "./lib";
+import { usePlayerContext } from "@/app/context/player";
+import { useRouter } from "next/navigation";
 
 import Button from "../button";
 import Textarea from "../textarea";
 
+import { postOracle } from "./lib";
+
 import styles from "./style.module.css";
-import { GameMetaType } from "@/lib/gameMeta";
-import { usePlayerContext } from "@/app/context/player";
-import { useRouter } from "next/navigation";
 
 // speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
 
 type ChatPropsType = {
   gamePath: string;
-  gameMeta: GameMetaType;
+  gameMeta: any;
   gameData: { isStarted: boolean, playerId: string; oracleText: string[] };
 };
 const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {

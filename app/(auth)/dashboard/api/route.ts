@@ -1,20 +1,14 @@
 import gamesActions from "@/db/mongo/collections/games";
+import gamesMetaActions from "@/db/mongo/collections/gamesMeta";
 import playersActions from "@/db/mongo/collections/players";
-import { GameMetaType } from "@/lib/gameMeta";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { getAllGames } from "./lib";
-
-const transformGame = ([gameKey, { title, description }]: [
-  string,
-  GameMetaType
-]) => ({ gameKey, title, description });
 
 export async function GET() {
   try {
-    const gamesMeta = await getAllGames();
-    const options = Object.entries(gamesMeta).map(transformGame);
+    const gamesMeta = await gamesMetaActions();
+    const options = await gamesMeta.getAllGames();
     return NextResponse.json({ options });
   } catch (error) {
     console.error(error);

@@ -8,9 +8,9 @@ import messagesActions from "@/db/postgres/messages";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import { streamToJSON, streamCompletetion } from "./lib";
-import { getGameMeta } from "@/app/(auth)/dashboard/api/lib";
 import { concatSpeakerText } from "@/lib/helpers";
 import playersActions from "@/db/mongo/collections/players";
+import gamesMetaActions from "@/db/mongo/collections/gamesMeta";
 
 type GamePramsType = { params: { type: string; id: string } };
 type MiddlewareOptsType = { playerId?: string, isStarted: boolean };
@@ -52,6 +52,13 @@ export type MessageResType = MiddlewareOptsType & {
   messages: { text: string; speaker: string }[];
 };
 
+const getMeta = async (gameKey: string) => {
+  const gamesMeta = await gamesMetaActions()
+  const game = await gamesMeta.findGameByKey(gameKey);
+  if (!game) throw Error('No game metadata found');
+  return game;
+}
+
 async function get(
   req: NextApiRequest,
   { params: { id, type } }: GamePramsType,
@@ -69,7 +76,7 @@ async function get(
 
     const resJson: MessageResType = { isStarted, playerId, messages };
     if (messagesRes.rowCount === 0) {
-      const { backstory, narrator } = await getGameMeta(type);
+      const { backstory, narrator } = await getMeta(type);
       const oracleText = await streamCompletetion(
         [`system: ${backstory}`, narrator].join("\n")
       );
@@ -105,7 +112,7 @@ async function put(
      * then I send the convo with the user's text and
      * have a completion done for the narrator.
      */
-    const { narrator, backstory } = await getGameMeta(type);
+    const { narrator, backstory } = await getMeta(type);
     textArr.unshift(backstory);
     textArr.push(speaker + cleanText);
     textArr.push(narrator);

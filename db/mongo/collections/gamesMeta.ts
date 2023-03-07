@@ -13,7 +13,7 @@ const gamesMetaActions = async () => {
     const gamesMeta = await getCol("gamesMeta");
     return {
         getAllGames() {
-            return gamesMeta.find().toArray();
+            return gamesMeta.find({}, { projection: { _id: 0 } }).toArray();
         },
         addGame(gameMeta: GameMetaType) {
             return gamesMeta.insertOne(gameMeta);
@@ -22,7 +22,7 @@ const gamesMetaActions = async () => {
             return gamesMeta.updateOne({ gameKey }, { $set: gameMeta })
         },
         findGameByKey(gameKey: string) {
-            return gamesMeta.findOne({ gameKey })
+            return gamesMeta.findOne({ gameKey }, { projection: { _id: 0 } })
         }
     }
 }
