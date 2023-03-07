@@ -21,8 +21,8 @@ const isAdminUser = async () => {
 export async function GET() {
     if (!isAdminUser()) return NextResponse.json({ unauthorized: true });
     const gamesMeta = await gamesMetaActions();
-    const meta = await gamesMeta.getAllGames();
-    return NextResponse.json(meta);
+    const metaData = await gamesMeta.getAllGames();
+    return NextResponse.json({ metaData });
 }
 
 export async function PUT(req: NextRequest, { params: { action } }: { params: { action: string } }) {    
@@ -31,16 +31,25 @@ export async function PUT(req: NextRequest, { params: { action } }: { params: { 
         
         if (!req.body) throw Error('Nothing was sent here!');        
         
-        const gameMeta = await streamToJSON(req.body);
-        
-        if (Object.values(gameMeta).some(v => v === '')) return NextResponse.json({ emptyKey: true });
+        const metaData = await streamToJSON(req.body);
+        if (Object.values(metaData).some(v => v === '')) return NextResponse.json({ emptyKey: true });
 
         const gamesMeta = await gamesMetaActions();
-        const game = await gamesMeta.findGameByKey(gameMeta.gameKey);
-        if (game) return NextResponse.json({ gameAlreadyMade: true });
-        
-        await gamesMeta.addGame(gameMeta);
-        return NextResponse.json({ gameCreated: true });
+
+        if (action === "add-game") {
+            const game = await gamesMeta.findGameByKey(metaData.gameKey);
+            if (game) return NextResponse.json({ gameAlreadyMade: true });
+            
+            await gamesMeta.addGame(metaData);
+            return NextResponse.json({ gameCreated: true });
+        } else if (action === "edit-game") {
+            const game = await gamesMeta.findGameByKey(metaData.gameKey);            
+            if (!game) return NextResponse.json({ gameNotFound: true });
+            
+            await gamesMeta.editGame(metaData);
+            return NextResponse.json({ gameEdited: true });
+        }
+
     } catch (error) {
         console.error(error)
     }

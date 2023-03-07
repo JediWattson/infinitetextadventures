@@ -18,6 +18,9 @@ const gamesMetaActions = async () => {
         addGame(gameMeta: GameMetaType) {
             return gamesMeta.insertOne(gameMeta);
         },
+        editGame({ gameKey, ...gameMeta }: GameMetaType) {
+            return gamesMeta.updateOne({ gameKey }, { $set: gameMeta })
+        },
         findGameByKey(gameKey: string) {
             return gamesMeta.findOne({ gameKey })
         }

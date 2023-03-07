@@ -6,6 +6,7 @@ import style from "./style.module.css";
 export default function Input({
   inputRef,
   label,
+  initValue,
   textArea,
   type
 }: {
@@ -13,9 +14,9 @@ export default function Input({
   textArea?: boolean;
   label: string;
   type?: string;
-}) {
-
-  const [levitateLabel, setLevitateLabel] = useState('');
+  initValue?: string; 
+}) {  
+  const [levitateLabel, setLevitateLabel] = useState((!initValue || initValue === '') ? '' : style.nonEmpty);
   const handleChange = (e: any) => {    
     if (e.target.value !== '') {
       setLevitateLabel(style.nonEmpty)
