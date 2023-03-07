@@ -12,7 +12,7 @@ const getGame = async (gamePath: string) => {
     cache: "no-store",
   });
   const data = await res.json();  
-  data.oracleText = data.messages.map(concatSpeakerText)
+  data.oracleText = data.messages.map(concatSpeakerText)  
   delete data.messages;
   
   return data;

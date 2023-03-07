@@ -10,15 +10,14 @@ export async function streamCompletetion(prompt: string) {
   const completion: any = await openai.createCompletion(
     {
       model: "text-davinci-003",
-      stream: true,
-
       prompt,
-      max_tokens: 420,
 
-      top_p: 0.73,
-      temperature: 0.6,
-      frequency_penalty: 0.33,
-      presence_penalty: 0.22,
+      stream: true,
+      temperature: 1,
+      max_tokens: 420,
+      top_p: 1,
+      frequency_penalty: 1.63,
+      presence_penalty: 1.69,
       stop: ["\n"],
     },
     { responseType: "stream" }
