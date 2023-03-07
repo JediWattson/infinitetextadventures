@@ -41,7 +41,7 @@ const Admin = () => {
     const mapData = (data: GameMetaType) => ({ value: data.gameKey, label: data.title  });
 
     useEffect(() => {
-        if (editGame || !adminData?.metaData) return;
+        if (editGame || !adminData?.metaData?.length) return;
         handleChange(adminData?.metaData[0].gameKey)
     }, [adminData?.metaData])
 
