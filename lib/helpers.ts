@@ -4,4 +4,4 @@ export const concatSpeakerText = ({
 }: {
   speaker: string;
   text: string;
-}) => `${speaker} ${text}`;
+}) => `${speaker}: ${text}`;

@@ -11,7 +11,7 @@ const getGame = async (gamePath: string) => {
   const res = await fetch(`${process.env.NEXTAUTH_URL}/game/${gamePath}/api`, {
     cache: "no-store",
   });
-  const data = await res.json();
+  const data = await res.json();  
   data.oracleText = data.messages.map(concatSpeakerText)
   delete data.messages;
   
@@ -27,7 +27,7 @@ export default async function Game({ params: { id, type } }: GamePramsType) {
   const gamePath = `${type}/${id}`;
   const gameMeta = await getMeta(type);  
   const gameData = await getGame(gamePath);
-  return <Chat gameMeta={gameMeta} gameData={gameData} gamePath={gamePath} />;
+  return <Chat gameSpeaker={gameMeta?.speaker} gameData={gameData} gamePath={gamePath} />;
 }
 
 export async function generateMetadata({

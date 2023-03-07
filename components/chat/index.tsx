@@ -16,10 +16,10 @@ import styles from "./style.module.css";
 
 type ChatPropsType = {
   gamePath: string;
-  gameMeta: any;
+  gameSpeaker: string;
   gameData: { isStarted: boolean, playerId: string; oracleText: string[] };
 };
-const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
+const Chat = ({ gamePath, gameSpeaker, gameData }: ChatPropsType) => {
   const [oracleSays, setOracle] = useState(gameData.oracleText);
   const handleRef = (ref: HTMLDivElement) => {
     if (!ref) return;
@@ -34,11 +34,10 @@ const Chat = ({ gamePath, gameMeta, gameData }: ChatPropsType) => {
     if (playerText === "") return;
     textValueRef.current.value = "";
 
-    const speaker = gameMeta.speaker;
-    const newChat = [...oracleSays, `${speaker} ${playerText}`];
+    const newChat = [...oracleSays, `${gameSpeaker}: ${playerText}`];
     setOracle(newChat);
 
-    const text = await postOracle(gamePath, { speaker, text: playerText });
+    const text = await postOracle(gamePath, playerText);
     setOracle([...newChat, text]);
   };
 

@@ -78,7 +78,7 @@ async function get(
     if (messagesRes.rowCount === 0) {
       const { backstory, narrator } = await getMeta(type);
       const oracleText = await streamCompletetion(
-        [`system: ${backstory}`, narrator].join("\n")
+        [`system: ${backstory}`, `${narrator}:`].join("\n")
       );
 
       await actionsGame.updateStatus(id, "started");
@@ -98,7 +98,7 @@ async function put(
   { params: { id, type } }: GamePramsType
 ) {
   try {
-    const { text, speaker } = await streamToJSON(req.body);
+    const { text } = await streamToJSON(req.body);
     const cleanText = text.trim()    
     if (cleanText.length > 300 || cleanText.length === 0)
       throw Error("Text string invalid!");
@@ -112,13 +112,15 @@ async function put(
      * then I send the convo with the user's text and
      * have a completion done for the narrator.
      */
-    const { narrator, backstory } = await getMeta(type);
+    const { narrator, speaker, backstory } = await getMeta(type);
+    
     textArr.unshift(backstory);
-    textArr.push(speaker + cleanText);
-    textArr.push(narrator);
+    textArr.push(`${speaker}:` + cleanText);
+    textArr.push(`${narrator}:`);
 
     await actionsMsg.addMessage(id, type, speaker, cleanText);
     const narratorText = await streamCompletetion(textArr.join("\n"));
+    
     await actionsMsg.addMessage(id, type, narrator, narratorText);
     return NextResponse.json({ speaker: narrator, text: narratorText });
   } catch (error) {
