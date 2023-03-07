@@ -18,19 +18,19 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    const userId = session?.user?.id
+    const userId = session?.user?.id;
     if (!userId) throw Error("No id for user found");
-    
+
     const players = await playersActions();
     const player = await players.findByUserId(userId);
-    if (!player) throw Error('Player not found');
-    
+    if (!player) throw Error("Player not found");
+
     const gameType = req.nextUrl.searchParams.get("type");
     if (!gameType) throw Error("No game type specificied");
 
-    const games = await gamesActions();    
+    const games = await gamesActions();
     const gameId = await games.createGame(player._id.toString(), gameType);
-    
+
     return NextResponse.json({ gameId });
   } catch (error) {
     console.error(error);

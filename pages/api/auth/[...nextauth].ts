@@ -34,7 +34,6 @@ declare interface DefaultSession {
 }
 
 export const authOptions = {
-
   // pages: { newUser: '/auth/new-user' },
 
   session: {
@@ -66,7 +65,6 @@ export const authOptions = {
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
     }),
-
   ],
 };
 

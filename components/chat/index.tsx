@@ -17,7 +17,7 @@ import styles from "./style.module.css";
 type ChatPropsType = {
   gamePath: string;
   gameSpeaker: string;
-  gameData: { isStarted: boolean, playerId: string; oracleText: string[] };
+  gameData: { isStarted: boolean; playerId: string; oracleText: string[] };
 };
 const Chat = ({ gamePath, gameSpeaker, gameData }: ChatPropsType) => {
   const [oracleSays, setOracle] = useState(gameData.oracleText);
@@ -48,10 +48,10 @@ const Chat = ({ gamePath, gameSpeaker, gameData }: ChatPropsType) => {
   const router = useRouter();
   const handleEndGame = async () => {
     try {
-      const res = await fetch(`/game/${gamePath}/api`, { method: "DELETE" });      
-      
+      const res = await fetch(`/game/${gamePath}/api`, { method: "DELETE" });
+
       // TODO: add some error handling
-      const data = await res.json();      
+      const data = await res.json();
       setIsExpanded(false);
       await router.push("/dashboard");
     } catch (error) {
@@ -59,7 +59,7 @@ const Chat = ({ gamePath, gameSpeaker, gameData }: ChatPropsType) => {
     }
   };
 
-  const { player } = usePlayerContext();  
+  const { player } = usePlayerContext();
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <>

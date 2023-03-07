@@ -8,34 +8,38 @@ export default function Input({
   label,
   initValue,
   textArea,
-  type
+  type,
 }: {
   inputRef: Ref<HTMLTextAreaElement & HTMLInputElement>;
   textArea?: boolean;
   label: string;
   type?: string;
-  initValue?: string; 
-}) {  
-  const [levitateLabel, setLevitateLabel] = useState((!initValue || initValue === '') ? '' : style.nonEmpty);
-  const handleChange = (e: any) => {    
-    if (e.target.value !== '') {
-      setLevitateLabel(style.nonEmpty)
+  initValue?: string;
+}) {
+  const [levitateLabel, setLevitateLabel] = useState(
+    !initValue || initValue === "" ? "" : style.nonEmpty
+  );
+  const handleChange = (e: any) => {
+    if (e.target.value !== "") {
+      setLevitateLabel(style.nonEmpty);
     } else if (levitateLabel !== "") {
-      setLevitateLabel("")
+      setLevitateLabel("");
     }
-  }
+  };
 
   const props = {
     onChange: handleChange,
     ref: inputRef,
-    className: `${levitateLabel} ${style.input} ${textArea ? style.textArea : ""}`
-  }
+    className: `${levitateLabel} ${style.input} ${
+      textArea ? style.textArea : ""
+    }`,
+  };
 
   return (
     <div className={style.inputContainer}>
       {textArea ? (
         <textarea {...props} />
-      ): (
+      ) : (
         <input {...props} type={type || "text"} />
       )}
       <label className={style.label}>{label}</label>

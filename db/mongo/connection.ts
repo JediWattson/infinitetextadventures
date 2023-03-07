@@ -10,7 +10,6 @@ if (!process.env.MONGDB_NAME) {
   throw new Error('Invalid/Missing environment variable: "MONGDB_NAME"');
 }
 
-
 const uri = `${process.env.MONGODB_URI}/${process.env.MONGDB_NAME}`;
 const options = {};
 

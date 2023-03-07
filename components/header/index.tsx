@@ -19,7 +19,7 @@ function Header() {
     playerCtx.clearPlayer();
     signOut();
   };
-  
+
   return (
     <nav className={styles.header}>
       <h2 className={styles.title}>

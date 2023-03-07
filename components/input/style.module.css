@@ -29,7 +29,7 @@
 
 .input {
   width: 100%;
-  
+
   border-bottom: #d7d7fd solid;
   border-top: transparent solid;
   border-left: transparent solid;
@@ -50,8 +50,8 @@
   border-bottom: #6262f2 solid;
 }
 
-.input:focus + .label, .nonEmpty + .label {
+.input:focus + .label,
+.nonEmpty + .label {
   font-size: 12px;
   transform: translate(0, -24px);
 }
-

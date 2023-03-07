@@ -13,7 +13,7 @@ import playersActions from "@/db/mongo/collections/players";
 import gamesMetaActions from "@/db/mongo/collections/gamesMeta";
 
 type GamePramsType = { params: { type: string; id: string } };
-type MiddlewareOptsType = { playerId?: string, isStarted: boolean };
+type MiddlewareOptsType = { playerId?: string; isStarted: boolean };
 
 const gamesActionsMiddleware =
   (
@@ -29,17 +29,22 @@ const gamesActionsMiddleware =
       const actionsGame = await gamesActions();
       const game = await actionsGame.findGameById(params.id);
       if (!game) return NextResponse.json({ gameNotFound: true });
-      const options = { playerId: game.playerId, isStarted: game.status === "started" };
+      const options = {
+        playerId: game.playerId,
+        isStarted: game.status === "started",
+      };
 
       if (optons?.userAuth) {
         const session = await getServerSession(authOptions);
         const userId = session?.user?.id;
-        
-        if (!userId || game.status !== "started" ) return NextResponse.json({ unathorized: true });
+
+        if (!userId || game.status !== "started")
+          return NextResponse.json({ unathorized: true });
 
         const actionsPlayer = await playersActions();
-        const player = await actionsPlayer.findByUserId(userId);        
-        if (game.playerId !== player?._id.toString()) return NextResponse.json({ unathorized: true });
+        const player = await actionsPlayer.findByUserId(userId);
+        if (game.playerId !== player?._id.toString())
+          return NextResponse.json({ unathorized: true });
       }
 
       return next(req, { params }, options);
@@ -53,11 +58,11 @@ export type MessageResType = MiddlewareOptsType & {
 };
 
 const getMeta = async (gameKey: string) => {
-  const gamesMeta = await gamesMetaActions()
+  const gamesMeta = await gamesMetaActions();
   const game = await gamesMeta.findGameByKey(gameKey);
-  if (!game) throw Error('No game metadata found');
+  if (!game) throw Error("No game metadata found");
   return game;
-}
+};
 
 async function get(
   req: NextApiRequest,
@@ -86,7 +91,7 @@ async function get(
       await actionsMsg.addMessage(id, type, narrator, oracleText);
       resJson.messages = [{ text: oracleText, speaker: narrator }];
     }
-    
+
     return NextResponse.json(resJson);
   } catch (error) {
     console.error(error);
@@ -99,7 +104,7 @@ async function put(
 ) {
   try {
     const { text } = await streamToJSON(req.body);
-    const cleanText = text.trim()    
+    const cleanText = text.trim();
     if (cleanText.length > 300 || cleanText.length === 0)
       throw Error("Text string invalid!");
 
@@ -113,14 +118,14 @@ async function put(
      * have a completion done for the narrator.
      */
     const { narrator, speaker, backstory } = await getMeta(type);
-    
+
     textArr.unshift(backstory);
     textArr.push(`${speaker}:` + cleanText);
     textArr.push(`${narrator}:`);
 
     await actionsMsg.addMessage(id, type, speaker, cleanText);
     const narratorText = await streamCompletetion(textArr.join("\n"));
-    
+
     await actionsMsg.addMessage(id, type, narrator, narratorText);
     return NextResponse.json({ speaker: narrator, text: narratorText });
   } catch (error) {
@@ -134,7 +139,7 @@ async function del(
 ) {
   try {
     const actionsGame = await gamesActions();
-    await actionsGame.updateStatus(params.id, "finished");    
+    await actionsGame.updateStatus(params.id, "finished");
     return NextResponse.json({});
   } catch (error) {
     console.error(error);
