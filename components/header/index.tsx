@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-
 import { signIn, signOut } from "next-auth/react";
 
 import { usePlayerContext } from "@/app/context/player";
-import Button from "@/components/button";
 
-import styles from "./styles.module.css";
+import Button from "@/components/button";
 import AdminBtn from "./admin-btn";
+
+import style from "./style.module.css";
 
 function Header() {
   const playerCtx = usePlayerContext();
@@ -21,13 +21,13 @@ function Header() {
   };
 
   return (
-    <nav className={styles.header}>
-      <h2 className={styles.title}>
-        <Link className={styles.homeLink} href={isSession ? "/dashboard" : "/"}>
+    <nav className={style.header}>
+      <h2 className={style.title}>
+        <Link className={style.homeLink} href={isSession ? "/dashboard" : "/"}>
           {"ITA!"}
         </Link>
       </h2>
-      <ul className={styles.actions}>
+      <ul className={style.actions}>
         {playerCtx.player?.role === "admin" && (
           <li>
             <AdminBtn />

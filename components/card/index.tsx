@@ -2,7 +2,7 @@ import Image from "next/image";
 import Button, { ButtonPropsType } from "../button";
 import { shimmer, toBase64 } from "./lib";
 
-import styles from "./styles.module.css";
+import style from "./style.module.css";
 
 function Card({
   img,
@@ -18,12 +18,12 @@ function Card({
   buttonProps?: ButtonPropsType;
 }) {
   return (
-    <div className={styles.cardContainer}>
+    <div className={style.cardContainer}>
       <h1>{title}</h1>
       {subtitle && <h4>{subtitle}</h4>}
       {img && (
         <Image
-          className={styles.cardImg}
+          className={style.cardImg}
           height={img.height}
           width={img.width}
           src={img.src}

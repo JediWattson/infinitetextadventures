@@ -1,11 +1,9 @@
 "use client";
 import { useState } from "react";
 
-import Button from "../button";
-
 import { useRouter } from "next/navigation";
 
-import styles from "./styles.module.css";
+import style from "./style.module.css";
 import Card from "../card";
 
 type GameOptionsPropsType = {
@@ -34,7 +32,7 @@ export default function GameOptions({ options }: GameOptionsPropsType) {
   };
 
   return (
-    <div className={styles.gameContainer}>
+    <div className={style.gameContainer}>
       {options.map(({ title, description, gameKey }, i) => (
         <Card
           key={gameKey}

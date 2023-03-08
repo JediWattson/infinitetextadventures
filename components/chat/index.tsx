@@ -7,24 +7,23 @@ import { useRouter } from "next/navigation";
 
 import Button from "../button";
 import Textarea from "../textarea";
+import DialogueBox, { DialogueType } from "../dialogue-box";
 
 import { postOracle } from "./lib";
 
 import styles from "./style.module.css";
 
-// speechSynthesis.speak(new SpeechSynthesisUtterance(data.text));
-
 type ChatPropsType = {
   gamePath: string;
   gameSpeaker: string;
-  gameData: { isStarted: boolean; playerId: string; oracleText: string[] };
-};
-const Chat = ({ gamePath, gameSpeaker, gameData }: ChatPropsType) => {
-  const [oracleSays, setOracle] = useState(gameData.oracleText);
-  const handleRef = (ref: HTMLDivElement) => {
-    if (!ref) return;
-    ref.scrollTop = ref.scrollHeight;
+  gameData: {  
+    isStarted: boolean; 
+    playerId: string; 
+    messages: DialogueType 
   };
+};
+const Chat = ({ gameData, gamePath, gameSpeaker }: ChatPropsType) => {
+  const [oracleSays, setOracle] = useState(gameData.messages);
 
   const textValueRef = useRef<HTMLTextAreaElement>(null);
   const handleClick = async () => {
@@ -34,11 +33,11 @@ const Chat = ({ gamePath, gameSpeaker, gameData }: ChatPropsType) => {
     if (playerText === "") return;
     textValueRef.current.value = "";
 
-    const newChat = [...oracleSays, `${gameSpeaker}: ${playerText}`];
+    const newText = { text: playerText, speaker: gameSpeaker };
+    const newChat = [...oracleSays, newText];
     setOracle(newChat);
-
-    const text = await postOracle(gamePath, playerText);
-    setOracle([...newChat, text]);
+    const message = await postOracle(gamePath, playerText);
+    setOracle([...newChat, message]);
   };
 
   const handleKeyUp = ({ key }: { key: string }) => {
@@ -63,14 +62,7 @@ const Chat = ({ gamePath, gameSpeaker, gameData }: ChatPropsType) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <>
-      <div ref={handleRef} className={styles.textBox}>
-        {oracleSays.map((o, i) => (
-          <p key={i}>
-            {o}
-            <br />
-          </p>
-        ))}
-      </div>
+      <DialogueBox dialogue={oracleSays} gameSpeaker={gameSpeaker} />
       {gameData.playerId === player?._id && gameData.isStarted && (
         <div className={styles.actions}>
           {isExpanded ? (

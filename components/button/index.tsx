@@ -1,4 +1,4 @@
-import styles from "./styles.module.css";
+import style from "./style.module.css";
 
 export type ButtonPropsType = {
   text: string;
@@ -12,9 +12,9 @@ function Button({ large, text, onClick, disabled, small }: ButtonPropsType) {
   return (
     <button
       disabled={disabled}
-      className={`${styles.buttonContainer} ${small ? styles.small : ""} ${
-        disabled ? styles.disabled : ""
-      } ${large ? styles.large : ""}`}
+      className={`${style.buttonContainer} ${small ? style.small : ""} ${
+        disabled ? style.disabled : ""
+      } ${large ? style.large : ""}`}
       onClick={onClick}
     >
       {text}

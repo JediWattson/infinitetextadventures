@@ -1,5 +1,3 @@
-import { concatSpeakerText } from "@/lib/helpers";
-
 export const postOracle = async (gamePath: string, text: string) => {
   const res = await fetch(`/game/${gamePath}/api`, {
     method: "PUT",
@@ -13,5 +11,5 @@ export const postOracle = async (gamePath: string, text: string) => {
   const data = await res.json();
   if (data.unathorized || data.gameNotFound) throw Error(`Unathorized`);
 
-  return concatSpeakerText(data);
+  return data;
 };
