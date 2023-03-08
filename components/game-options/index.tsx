@@ -23,25 +23,29 @@ export default function GameOptions({ options }: GameOptionsPropsType) {
       });
       const game = await res.json();
       router.push(
-        game.gameFound 
+        game.gameFound
           ? `/game/${game.type}/${game._id}`
           : `/game/${gameType}/${game.gameId}`
-        );
+      );
     } catch (error) {
       console.error(error);
       setLoading("");
     }
   };
 
-  
   return (
     <div className={styles.gameContainer}>
       {options.map(({ title, description, gameKey }, i) => (
-        <Card title={title} subtitle={description} buttonProps={{  
-          onClick: () => handleClick(gameKey),
-          text:  loading === gameKey ? "Creating game" : "Create a game",
-          disabled: loading !== ""
-        }} />
+        <Card
+          key={gameKey}
+          title={title}
+          subtitle={description}
+          buttonProps={{
+            onClick: () => handleClick(gameKey),
+            text: loading === gameKey ? "Creating game" : "Create a game",
+            disabled: loading !== "",
+          }}
+        />
       ))}
     </div>
   );

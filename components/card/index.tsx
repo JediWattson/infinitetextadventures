@@ -9,31 +9,37 @@ function Card({
   title,
   subtitle,
   footer,
-  buttonProps
+  buttonProps,
 }: {
   title: string;
   subtitle?: string;
   footer?: { title: string; subtitle: string | string[] };
   img?: { src: string; alt: string; height: number; width: number };
-  buttonProps?: ButtonPropsType
+  buttonProps?: ButtonPropsType;
 }) {
   return (
     <div className={styles.cardContainer}>
       <h1>{title}</h1>
       {subtitle && <h4>{subtitle}</h4>}
-      {img && <Image
-        className={styles.cardImg}
-        height={img.height}
-        width={img.width}
-        src={img.src}
-        alt={img.alt}
-        placeholder="blur"
-        blurDataURL={`data:image/svg+xml;base64,${toBase64(
-          shimmer(img.height, img.width)
-        )}`}
-      />}
+      {img && (
+        <Image
+          className={styles.cardImg}
+          height={img.height}
+          width={img.width}
+          src={img.src}
+          alt={img.alt}
+          placeholder="blur"
+          blurDataURL={`data:image/svg+xml;base64,${toBase64(
+            shimmer(img.height, img.width)
+          )}`}
+        />
+      )}
       {buttonProps && (
-        <Button text={buttonProps.text} onClick={buttonProps.onClick} disabled={buttonProps.disabled} />
+        <Button
+          text={buttonProps.text}
+          onClick={buttonProps.onClick}
+          disabled={buttonProps.disabled}
+        />
       )}
       {footer && (
         <>

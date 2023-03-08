@@ -25,13 +25,3 @@
 .button {
   width: 220px;
 }
-
-@media (max-width: 450px) {
-  .actions {
-    height: 48px;
-  }
-  .textarea {
-    width: 100%;
-    padding: 4px;
-  }
-}

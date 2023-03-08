@@ -30,7 +30,7 @@ export async function PUT(req: NextRequest) {
 
     const games = await gamesActions();
     const playerId = player._id.toString();
-    const game = await games.findCurrentGame(playerId);    
+    const game = await games.findCurrentGame(playerId);
     if (game) return NextResponse.json({ ...game, gameFound: true });
     const gameId = await games.createGame(playerId, gameType);
 
