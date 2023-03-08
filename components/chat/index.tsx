@@ -16,10 +16,10 @@ import styles from "./style.module.css";
 type ChatPropsType = {
   gamePath: string;
   gameSpeaker: string;
-  gameData: {  
-    isStarted: boolean; 
-    playerId: string; 
-    messages: DialogueType 
+  gameData: {
+    isStarted: boolean;
+    playerId: string;
+    messages: DialogueType;
   };
 };
 const Chat = ({ gameData, gamePath, gameSpeaker }: ChatPropsType) => {

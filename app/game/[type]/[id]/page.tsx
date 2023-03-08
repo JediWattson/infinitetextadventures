@@ -15,19 +15,13 @@ const getGame = async (type: string, id: string) => {
   const game = await res.json();
   const gamesMeta = await gamesMetaActions();
   const meta = await gamesMeta.findGameByKey(type);
-  if (!meta) throw Error('Meta not found');
-  return { ...game, gamePath, speaker: meta.speaker }
+  if (!meta) throw Error("Meta not found");
+  return { ...game, gamePath, speaker: meta.speaker };
 };
 
 export default async function Game({ params: { id, type } }: GamePramsType) {
-  const { gamePath, speaker, ...gameData } = await getGame(type, id);  
-  return (
-    <Chat
-      gameSpeaker={speaker}
-      gamePath={gamePath}
-      gameData={gameData}
-    />
-  );
+  const { gamePath, speaker, ...gameData } = await getGame(type, id);
+  return <Chat gameSpeaker={speaker} gamePath={gamePath} gameData={gameData} />;
 }
 
 export async function generateMetadata({
