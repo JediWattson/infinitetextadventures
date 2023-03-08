@@ -29,7 +29,10 @@ export async function PUT(req: NextRequest) {
     if (!gameType) throw Error("No game type specificied");
 
     const games = await gamesActions();
-    const gameId = await games.createGame(player._id.toString(), gameType);
+    const playerId = player._id.toString();
+    const game = await games.findCurrentGame(playerId);    
+    if (game) return NextResponse.json({ ...game, gameFound: true });
+    const gameId = await games.createGame(playerId, gameType);
 
     return NextResponse.json({ gameId });
   } catch (error) {

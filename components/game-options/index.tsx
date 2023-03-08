@@ -6,6 +6,7 @@ import Button from "../button";
 import { useRouter } from "next/navigation";
 
 import styles from "./styles.module.css";
+import Card from "../card";
 
 type GameOptionsPropsType = {
   options: { title: string; description: string; gameKey: string }[];
@@ -21,26 +22,26 @@ export default function GameOptions({ options }: GameOptionsPropsType) {
         method: "PUT",
       });
       const game = await res.json();
-      if (!game.gameId) throw Error("Game was not created here...");
-      router.push(`/game/${gameType}/${game.gameId}`);
+      router.push(
+        game.gameFound 
+          ? `/game/${game.type}/${game._id}`
+          : `/game/${gameType}/${game.gameId}`
+        );
     } catch (error) {
       console.error(error);
       setLoading("");
     }
   };
 
+  
   return (
     <div className={styles.gameContainer}>
       {options.map(({ title, description, gameKey }, i) => (
-        <div key={i} className={styles.card}>
-          <h2>{title}</h2>
-          <p>{description}</p>
-          <Button
-            onClick={() => handleClick(gameKey)}
-            text={loading === gameKey ? "Creating game" : "Create a game"}
-            disabled={loading !== ""}
-          />
-        </div>
+        <Card title={title} subtitle={description} buttonProps={{  
+          onClick: () => handleClick(gameKey),
+          text:  loading === gameKey ? "Creating game" : "Create a game",
+          disabled: loading !== ""
+        }} />
       ))}
     </div>
   );

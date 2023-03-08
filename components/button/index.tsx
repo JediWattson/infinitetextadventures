@@ -1,6 +1,6 @@
 import styles from "./styles.module.css";
 
-type ButtonPropsType = {
+export type ButtonPropsType = {
   text: string;
   onClick: () => void;
   disabled?: boolean;

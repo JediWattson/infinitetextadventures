@@ -14,7 +14,7 @@ export async function streamCompletetion(prompt: string) {
 
       stream: true,
       temperature: 1,
-      max_tokens: 420,
+      max_tokens: 220,
       top_p: 1,
       frequency_penalty: 1.63,
       presence_penalty: 1.69,
