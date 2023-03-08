@@ -24,3 +24,9 @@
   border-radius: 8px;
   object-fit: cover;
 }
+
+@media (max-width: 600px) {
+  .cardContainer {
+    margin: 0;
+  }
+}
