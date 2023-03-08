@@ -5,13 +5,25 @@ export default async function gamesActions() {
   const games = await getCol("games");
 
   return {
-    async findCurrentGame(playerId: string) {
+    async createGame(playerId: string, type: string) {
+      const currentGame = await this.findCurrentGame(playerId);
+      if (currentGame) return currentGame._id;
+      const game = await games.insertOne({ playerId, type });
+      return game.insertedId;
+    },
+    updateMsgCount(gameId: string, msgCount: number) {
+      return games.updateOne({ _id: new ObjectId(gameId) }, { $set: { msgCount } })
+    },
+    updateStatus(gameId: string, status: string) {
+      return games.updateOne({ _id: new ObjectId(gameId) }, { $set: { status } });
+    },
+    findCurrentGame(playerId: string) {
       return games.findOne({ playerId, status: "started" });
     },
-    async findGameById(gameId: string) {
+    findGameById(gameId: string) {
       return games.findOne({ _id: new ObjectId(gameId) });
     },
-    async findLastGames(limit: number) {
+    findLastGames(limit: number) {
       return games
         .aggregate([
           {
@@ -37,20 +49,6 @@ export default async function gamesActions() {
           },
         ])
         .toArray();
-    },
-    async createGame(playerId: string, type: string) {
-      const currentGame = await this.findCurrentGame(playerId);
-      if (currentGame) return currentGame._id;
-      const game = await games.insertOne({ playerId, type });
-      return game.insertedId;
-    },
-    async updateStatus(gameId: string, status: string) {
-      try {
-        const _id = new ObjectId(gameId);
-        return games.updateOne({ _id }, { $set: { status } });
-      } catch (error) {
-        console.error(error);
-      }
-    },
+    }
   };
 }

@@ -1,12 +1,6 @@
 .gameContainer {
   display: flex;
-  max-width: 950px;
+  flex-direction: column;
+  max-width: 500px;
   margin: auto;
-}
-
-@media (max-width: 650px) {
-  .gameContainer {
-    flex-direction: column;
-    gap: 16px;
-  }
 }

@@ -71,7 +71,7 @@ const Admin = () => {
         </div>
       </div>
       {(isAddEvent || (isEditEvent && editGame)) && (
-        <GameForm gameData={editGame} onClose={handleClose} />
+        <GameForm gameData={isEditEvent ? editGame : undefined} onClose={handleClose} />
       )}
     </>
   );
